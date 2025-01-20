@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar'; // Import the Navbar component
+import ApplicantsList from './ApplicantsList';
 
 const RecruiterHome = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -13,6 +14,7 @@ const RecruiterHome = () => {
   return (
     <div>
       <Navbar />
+      <ApplicantsList/>
       <div className="min-h-screen bg-gray-100 flex justify-center items-center">
         <div className="w-full max-w-sm p-6 bg-white rounded shadow">
           <div className="relative">
@@ -31,7 +33,7 @@ const RecruiterHome = () => {
               >
                 <li
                   className="py-2 px-4 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => navigate('/job')}
+                  onClick={() => navigate('/jobform')}
                 >
                   Jobs
                 </li>

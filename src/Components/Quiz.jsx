@@ -26,7 +26,7 @@ const Quiz = () => {
 
   // Handle correct answer selection
   const handleCorrectAnswerChange = (e) => {
-    setCorrectAnswer(Number(e.target.value)); // Store as number
+    setCorrectAnswer(Number(e.target.value)); // Ensure correctAnswer is stored as a number
   };
 
   // Add the question to the list
@@ -47,6 +47,7 @@ const Quiz = () => {
       alert('Please fill in the question, all options, and select a correct answer!');
     }
   };
+
   const handleSubmitQuiz = async () => {
     let newErrors = {};
     if (!quizTitle.trim()) newErrors.title = 'Title is required.';
@@ -61,6 +62,7 @@ const Quiz = () => {
   
       const quizId = `quiz-${Date.now()}`; // Example: Unique quizId generation based on current time
   
+      // Send the quiz data to the backend
       const response = await axios.post('http://localhost:4000/api/quiz', {
         quizId, // Send quizId
         title: quizTitle,
@@ -84,6 +86,7 @@ const Quiz = () => {
       setLoading(false);
     }
   };
+
   return (
     <div>
       <Navbar />
@@ -91,6 +94,7 @@ const Quiz = () => {
         <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
           <h2 className="text-2xl font-bold mb-6">Create a Quiz</h2>
 
+          {/* Quiz Title */}
           <div className="mb-6">
             <label className="block mb-2 font-medium">Quiz Title</label>
             <input
@@ -103,6 +107,7 @@ const Quiz = () => {
             {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
           </div>
 
+          {/* Quiz Description */}
           <div className="mb-6">
             <label className="block mb-2 font-medium">Quiz Description</label>
             <textarea
@@ -114,6 +119,7 @@ const Quiz = () => {
             {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
           </div>
 
+          {/* Question */}
           <div className="mb-6">
             <label className="block mb-2 font-medium">Question</label>
             <input
@@ -125,6 +131,7 @@ const Quiz = () => {
             />
           </div>
 
+          {/* Options */}
           <div className="grid grid-cols-2 gap-4">
             {options.map((option, index) => (
               <div key={index} className="mb-4">
@@ -140,6 +147,7 @@ const Quiz = () => {
             ))}
           </div>
 
+          {/* Correct Answer */}
           <div className="mb-6">
             <label className="block mb-2 font-medium">Select Correct Answer</label>
             <select
@@ -156,6 +164,7 @@ const Quiz = () => {
             </select>
           </div>
 
+          {/* Add Question Button */}
           <button
             onClick={handleAddQuestion}
             className="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600"
@@ -163,6 +172,7 @@ const Quiz = () => {
             Add Question
           </button>
 
+          {/* Questions List */}
           <div className="mt-6">
             <h3 className="text-lg font-bold mb-4">Questions Added:</h3>
             {questions.map((item, index) => (
@@ -182,6 +192,7 @@ const Quiz = () => {
             ))}
           </div>
 
+          {/* Submit Button */}
           {questions.length > 0 && (
             <button
               onClick={handleSubmitQuiz}

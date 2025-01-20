@@ -11,8 +11,11 @@ import Notifi from './Components/Notifi';
 import Quiz from './Components/Quiz';
 import Hackathons from './Components/Hackathons';
 import Internship from './Components/Internship';
-import Job from './Components/Job';
-import TakeQuiz from './Components/Takequiz';
+import JobForm from './Components/JobForm';
+import QuizPlay from './Components/QuizPlay';
+import JobList from './Components/Joblist';
+import ApplicantsList from './Components/ApplicantsList';
+
 
 
 const App = () => {
@@ -27,11 +30,17 @@ const App = () => {
                 <Route path='/notification' element={<Notifi/>}/>
                 <Route path='/usernav' element={<UserNav/>}/>
                 <Route path='/userNoti' element={<UserNoti/>}/>
+                <Route path="/quiz/:quizId" element={<QuizPlay />} />
+                <Route path='/joblist' element={<JobList/>}/>
                 <Route path='/quiz' element={<Quiz/>}/>
                 <Route path='/hackathons' element={<Hackathons/>}/>
                 <Route path='/internship' element={<Internship/>}/>
-                <Route path='/job' element={<Job/>}/>
+                <Route path='/jobform' element={<JobForm/>}/>
+                
+                <Route path="/jobs/:jobId/applicants" element={<ApplicantsList />} />
+
             </Routes>
+            
         </Router>
     );
 };

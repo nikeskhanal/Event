@@ -27,6 +27,14 @@ const UserNav = () => {
                             Home
                         </NavLink>
                     </li>
+                    <NavLink
+                            to="/quiz/:quizId"
+                            className={({ isActive }) =>
+                                isActive ? 'text-gray-200 font-bold' : 'text-white hover:text-gray-200'
+                            }
+                        >
+                            quizplay
+                        </NavLink>
                     <li>
                         <NavLink
                             to="/profile"
@@ -37,29 +45,8 @@ const UserNav = () => {
                             Profile
                         </NavLink>
 
-
-                        <NavLink
-                            to="/takequiz/:quizId"
-                            className={({ isActive }) =>
-                                isActive ? 'text-gray-200 font-bold' : 'text-white hover:text-gray-200'
-                            }
-                        >
-                            quiz
-                        </NavLink>
-
-
-
                     </li>
-                    <li>
-                        <NavLink
-                            to="/takequiz"
-                            className={({ isActive }) =>
-                                isActive ? 'text-gray-200 font-bold' : 'text-white hover:text-gray-200'
-                            }
-                        >
-                            Notifications
-                        </NavLink>
-                    </li>
+                    
                     <li>
                         <button
                             onClick={handleLogout}
