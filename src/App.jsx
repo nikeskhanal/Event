@@ -15,8 +15,8 @@ import JobForm from './Components/JobForm';
 import QuizPlay from './Components/QuizPlay';
 import JobList from './Components/Joblist';
 import ApplicantsList from './Components/ApplicantsList';
-
-
+import MyPostedJobs from './Components/MyPostedJobs';
+import SendMessage from './Components/SendMessage';
 
 const App = () => {
     return (
@@ -25,22 +25,25 @@ const App = () => {
                 <Route path="/" element={<Login />} />
                 <Route path="/recruiter-home" element={<RecruiterHome />} />
                 <Route path="/user-home" element={<UserHome />} />
-                <Route path="/signup" element={<Signup/>}/>
-                <Route path='/Profile' element={<Profile/>}/>
-                <Route path='/notification' element={<Notifi/>}/>
-                <Route path='/usernav' element={<UserNav/>}/>
-                <Route path='/userNoti' element={<UserNoti/>}/>
+                <Route path="/signup" element={<Signup />} />
+                <Route path='/Profile' element={<Profile />} />
+                <Route path='/notification' element={<Notifi />} />
+                <Route path='/usernav' element={<UserNav />} />
+                <Route path='/userNoti' element={<UserNoti />} />
                 <Route path="/quiz/:quizId" element={<QuizPlay />} />
-                <Route path='/joblist' element={<JobList/>}/>
-                <Route path='/quiz' element={<Quiz/>}/>
-                <Route path='/hackathons' element={<Hackathons/>}/>
-                <Route path='/internship' element={<Internship/>}/>
-                <Route path='/jobform' element={<JobForm/>}/>
+                <Route path='/joblist' element={<JobList />} />
+                <Route path='/quiz' element={<Quiz />} />
+                <Route path='/hackathons' element={<Hackathons />} />
+                <Route path='/internship' element={<Internship />} />
+                <Route path='/jobform' element={<JobForm />} />
+                <Route path='/sendmessage' element={<SendMessage />} />
                 
-                <Route path="/jobs/:jobId/applicants" element={<ApplicantsList />} />
+                {/* Updated routes */}
+                <Route path="/recruiter-home/my-posted-jobs" element={<MyPostedJobs />} />
+               
+                <Route path="/job/:jobId/applicants" element={<ApplicantsList />} />
 
             </Routes>
-            
         </Router>
     );
 };

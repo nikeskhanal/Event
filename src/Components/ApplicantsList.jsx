@@ -1,78 +1,99 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';  // Import useParams
+import SendMessage from './SendMessage'; // Import the SendMessage component
 
 const ApplicantsList = () => {
-  const { jobId } = useParams(); // Get jobId from URL
-  const [applicants, setApplicants] = useState([]);
-  const [error, setError] = useState('');
+  const { jobId } = useParams(); // Extract jobId from the URL
+  const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [notificationStatus, setNotificationStatus] = useState({});
 
   useEffect(() => {
-    const fetchApplicants = async () => {
-      if (!jobId) {
-        setError('Job ID is missing.');
-        setLoading(false);
-        return;
-      }
+    if (!jobId) {
+      setError('Invalid job ID');
+      setLoading(false);
+      return;
+    }
 
+    const fetchApplications = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get(
-          `http://localhost:4000/api/jobs/applicants/${jobId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        // Ensure applicants array exists in the response
-        if (response.data && response.data.applicants) {
-          setApplicants(response.data.applicants);
-        } else {
-          setError('No applicants found.');
-        }
+        const response = await axios.get(`http://localhost:4000/api/jobs/${jobId}/applications`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        setApplications(response.data.applications);
         setLoading(false);
       } catch (err) {
-        console.error(err);
-        setError('Failed to fetch applicants.');
+        setError('Failed to load applications. Please try again later.');
         setLoading(false);
       }
     };
 
-    fetchApplicants();
+    fetchApplications();
   }, [jobId]);
 
+  const sendNotification = async (userId, message) => {
+    try {
+      const response = await axios.post(
+        'http://localhost:4000/api/notifications/send',
+        { userId, message },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      setNotificationStatus((prev) => ({ ...prev, [userId]: 'Sent' }));
+    } catch (error) {
+      setNotificationStatus((prev) => ({ ...prev, [userId]: 'Failed' }));
+    }
+  };
+
   if (loading) {
-    return <div>Loading applicants...</div>;
+    return <div>Loading applications...</div>;
   }
 
   if (error) {
-    return <div style={{ color: 'red' }}>{error}</div>;
+    return <div>{error}</div>;
+  }
+
+  if (applications.length === 0) {
+    return <div>No applicants for this job yet.</div>;
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Applicants</h2>
-      {applicants.length === 0 ? (
-        <p>No applicants found for this job.</p>
-      ) : (
-        <ul>
-          {applicants.map((applicant) => (
-            <li key={applicant.user ? applicant.user._id : 'unknown'}>
-              {applicant.user ? (
-                <>
-                  <p><strong>Name:</strong> {applicant.user.name}</p>
-                  <p><strong>Email:</strong> {applicant.user.email}</p>
-                </>
-              ) : (
-                <p>Unknown Applicant</p>
+    <div>
+      <h2>Applicants for Job {jobId}</h2>
+      <ul>
+        {applications.map((application) => (
+          <li key={application._id} className="mb-4 p-4 border border-gray-300 rounded-lg">
+            <div>
+              <strong>{application.user.name}</strong> ({application.user.email})
+            </div>
+            <div>Applied at: {new Date(application.appliedAt).toLocaleString()}</div>
+
+            <div className="mt-2">
+              {/* Send Message Button */}
+              <SendMessage
+                jobId={jobId}
+                applicantId={application.user._id}
+                sendNotification={sendNotification} // Pass sendNotification function as prop
+              />
+              {/* Display notification status */}
+              {notificationStatus[application.user._id] && (
+                <div className="mt-2 text-sm text-green-500">
+                  {notificationStatus[application.user._id] === 'Sent'
+                    ? 'Notification Sent!'
+                    : 'Failed to send notification'}
+                </div>
               )}
-            </li>
-          ))}
-        </ul>
-      )}
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar'; // Import the Navbar component
 import ApplicantsList from './ApplicantsList';
+import MyPostedJobs from './MyPostedJobs';
 
 const RecruiterHome = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -14,7 +15,7 @@ const RecruiterHome = () => {
   return (
     <div>
       <Navbar />
-      <ApplicantsList/>
+      <MyPostedJobs/>
       <div className="min-h-screen bg-gray-100 flex justify-center items-center">
         <div className="w-full max-w-sm p-6 bg-white rounded shadow">
           <div className="relative">

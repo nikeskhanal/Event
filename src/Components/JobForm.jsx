@@ -8,31 +8,35 @@ const JobForm = () => {
   const [location, setLocation] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Check if all fields are filled
+  
     if (!title || !description || !company || !location) {
       setError('Please fill in all fields');
       setSuccess('');
       return;
     }
-
+  
+    setLoading(true);
     try {
-      const token = localStorage.getItem('token'); // JWT stored in localStorage
+      const token = localStorage.getItem('token');
+      const API_URL = 'http://localhost:4000'; // Hardcoded default URL
 
       const response = await axios.post(
-        'http://localhost:4000/api/jobs/createjob', // Update with your backend API URL
+        `${API_URL}/api/jobs/create`,
         { title, description, company, location },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Send JWT for authentication
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
         }
       );
-
+  
+      console.log('Response data:', response.data); // Log response for debugging
+  
       setSuccess('Job posted successfully!');
       setError('');
       setTitle('');
@@ -40,10 +44,19 @@ const JobForm = () => {
       setCompany('');
       setLocation('');
     } catch (err) {
-      setError('Failed to post job. Please try again.');
+      console.error('Error:', err.response || err); // Log error details
+      if (err.response?.status === 401) {
+        setError('Session expired. Please log in again.');
+        localStorage.removeItem('token');
+      } else {
+        setError(err.response?.data?.error || 'Failed to post job. Please try again.');
+      }
       setSuccess('');
+    } finally {
+      setLoading(false);
     }
   };
+  
 
   return (
     <div className="max-w-xl mx-auto mt-10 bg-white p-6 shadow-md rounded-lg">
@@ -68,7 +81,6 @@ const JobForm = () => {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            required
             className="mt-1 w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -80,7 +92,6 @@ const JobForm = () => {
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            required
             className="mt-1 w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -93,7 +104,6 @@ const JobForm = () => {
             type="text"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
-            required
             className="mt-1 w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -106,16 +116,16 @@ const JobForm = () => {
             type="text"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            required
             className="mt-1 w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
         <div>
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full py-2 rounded focus:outline-none ${loading ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
+            disabled={loading}
           >
-            Post Job
+            {loading ? 'Posting...' : 'Post Job'}
           </button>
         </div>
       </form>

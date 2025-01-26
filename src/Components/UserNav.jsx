@@ -45,6 +45,25 @@ const UserNav = () => {
                             Profile
                         </NavLink>
 
+
+
+                    </li>
+
+
+
+
+                    <li>
+                        <NavLink
+                            to="/userNoti"
+                            className={({ isActive }) =>
+                                isActive ? 'text-gray-200 font-bold' : 'text-white hover:text-gray-200'
+                            }
+                        >
+                            notification
+                        </NavLink>
+
+                        
+
                     </li>
                     
                     <li>
