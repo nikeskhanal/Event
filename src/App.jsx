@@ -23,8 +23,8 @@ const App = () => {
         <Router>
             <Routes>
                 <Route path="/" element={<Login />} />
-                <Route path="/recruiter-home" element={<RecruiterHome />} />
-                <Route path="/user-home" element={<UserHome />} />
+                <Route path="/:id/recruiter-home" element={<RecruiterHome />} />
+                <Route path="/:id/user-home" element={<UserHome />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path='/Profile' element={<Profile />} />
                 <Route path='/notification' element={<Notifi />} />
@@ -39,7 +39,7 @@ const App = () => {
                 <Route path='/sendmessage' element={<SendMessage />} />
                 
                 {/* Updated routes */}
-                <Route path="/recruiter-home/my-posted-jobs" element={<MyPostedJobs />} />
+                <Route path="/:id/recruiter-home/my-posted-jobs" element={<MyPostedJobs />} />
                
                 <Route path="/job/:jobId/applicants" element={<ApplicantsList />} />
 

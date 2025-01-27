@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const SendMessage = ({ jobId, applicantId }) => {
+const SendMessage = ({ applicantId, sendNotification }) => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -11,26 +11,20 @@ const SendMessage = ({ jobId, applicantId }) => {
   };
 
   const sendMessage = async () => {
-    if (!message) {
+    if (!message.trim()) {
       setError('Message cannot be empty.');
+      setSuccess('');
       return;
     }
 
     try {
-      const response = await axios.post(
-        'http://localhost:4000/api/notifications/send',
-        {  userId, message },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-
+      await sendNotification(applicantId, message); // Use the passed-down function
       setSuccess('Message sent successfully!');
+      setError('');
       setMessage('');
     } catch (err) {
-      setError('Failed to send message.');
+      setError('Failed to send message. Please try again.');
+      setSuccess('');
     }
   };
 
@@ -42,11 +36,17 @@ const SendMessage = ({ jobId, applicantId }) => {
         placeholder="Write your message here..."
         rows="4"
         cols="50"
+        className="border border-gray-300 rounded-md p-2 w-full"
       ></textarea>
-      <button onClick={sendMessage}>Send Message</button>
+      <button
+        onClick={sendMessage}
+        className="bg-blue-500 text-white px-4 py-2 rounded-md mt-2"
+      >
+        Send Message
+      </button>
 
-      {error && <div className="text-red-500">{error}</div>}
-      {success && <div className="text-green-500">{success}</div>}
+      {error && <div className="text-red-500 mt-2">{error}</div>}
+      {success && <div className="text-green-500 mt-2">{success}</div>}
     </div>
   );
 };
