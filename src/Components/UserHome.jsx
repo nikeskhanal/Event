@@ -7,7 +7,7 @@ const UserHome = () => {
 
   // Handlers for button clicks
   const handleQuizClick = () => {
-    navigate('/browse-quiz');
+    navigate('/play-quiz/:quizId');
   };
 
   const handleHackathonClick = () => {

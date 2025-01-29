@@ -30,13 +30,14 @@ const App = () => {
                 <Route path='/notification' element={<Notifi />} />
                 <Route path='/usernav' element={<UserNav />} />
                 <Route path='/userNoti' element={<UserNoti />} />
-                <Route path="/quiz/:quizId" element={<QuizPlay />} />
+                <Route path="/play-quiz/:quizId" element={<QuizPlay />} />
                 <Route path='/joblist' element={<JobList />} />
                 <Route path='/quiz' element={<Quiz />} />
                 <Route path='/hackathons' element={<Hackathons />} />
                 <Route path='/internship' element={<Internship />} />
                 <Route path='/jobform' element={<JobForm />} />
                 <Route path='/sendmessage' element={<SendMessage />} />
+               
                 
                 {/* Updated routes */}
                 <Route path="/:id/recruiter-home/my-posted-jobs" element={<MyPostedJobs />} />
