@@ -9,6 +9,8 @@ const QuizPlay = ({ quizId }) => {
   const [score, setScore] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(30);
 
   useEffect(() => {
     const fetchQuiz = async () => {
@@ -18,7 +20,7 @@ const QuizPlay = ({ quizId }) => {
         setQuiz(response.data);
       } catch (error) {
         console.error('Error fetching quiz:', error);
-        alert('Error fetching quiz. Please try again later.');
+        setError('Failed to load quiz. Please try again later.');
       } finally {
         setLoading(false);
       }
@@ -26,6 +28,22 @@ const QuizPlay = ({ quizId }) => {
 
     fetchQuiz();
   }, [quizId]);
+
+  useEffect(() => {
+    if (!isFinished && !loading) {
+      const timer = setInterval(() => {
+        setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [currentQuestionIndex, isFinished, loading]);
+
+  useEffect(() => {
+    if (timeLeft === 0) {
+      handleNextQuestion();
+    }
+  }, [timeLeft]);
 
   const handleOptionSelect = (index) => {
     setSelectedOption(index);
@@ -39,6 +57,7 @@ const QuizPlay = ({ quizId }) => {
     if (currentQuestionIndex + 1 < quiz.questions.length) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedOption(null);
+      setTimeLeft(30); // Reset timer for the next question
     } else {
       setIsFinished(true);
     }
@@ -46,6 +65,10 @@ const QuizPlay = ({ quizId }) => {
 
   if (loading) {
     return <div>Loading quiz...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500 text-center mt-8">{error}</div>;
   }
 
   if (!quiz) {
@@ -69,11 +92,14 @@ const QuizPlay = ({ quizId }) => {
               <h3 className="text-lg font-bold mb-4">
                 Question {currentQuestionIndex + 1} of {quiz.questions.length}
               </h3>
+              <p className="mb-4">Time Left: {timeLeft} seconds</p>
               <p className="mb-4">{quiz.questions[currentQuestionIndex].question}</p>
               <ul className="mb-6">
                 {quiz.questions[currentQuestionIndex].options.map((option, index) => (
                   <li
                     key={index}
+                    role="button"
+                    aria-label={`Option ${String.fromCharCode(65 + index)}: ${option}`}
                     className={`p-2 border rounded mb-2 cursor-pointer hover:bg-blue-100 ${
                       selectedOption === index ? 'bg-blue-200' : ''
                     }`}
@@ -86,7 +112,9 @@ const QuizPlay = ({ quizId }) => {
               <button
                 onClick={handleNextQuestion}
                 disabled={selectedOption === null}
-                className="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600"
+                className={`px-4 py-2 bg-blue-500 text-white font-semibold rounded ${
+                  selectedOption === null ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-600'
+                }`}
               >
                 {currentQuestionIndex + 1 === quiz.questions.length ? 'Finish Quiz' : 'Next Question'}
               </button>
