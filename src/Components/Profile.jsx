@@ -26,9 +26,9 @@ const Profile = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setUser(data.user);  // Store user data
+        setUser(data.user);  
       } else {
-        setMessage(data.message);  // Display error message
+        setMessage(data.message); 
       }
     } catch (error) {
       setMessage('Error fetching profile');

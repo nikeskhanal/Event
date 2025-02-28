@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 const SendMessage = ({ applicantId, sendNotification }) => {
   const [message, setMessage] = useState('');
@@ -29,18 +28,17 @@ const SendMessage = ({ applicantId, sendNotification }) => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col space-y-2 w-full">
       <textarea
         value={message}
         onChange={handleMessageChange}
         placeholder="Write your message here..."
         rows="4"
-        cols="50"
-        className="border border-gray-300 rounded-md p-2 w-full"
+        className="border border-gray-300 rounded-md p-2 w-full resize-none"
       ></textarea>
       <button
         onClick={sendMessage}
-        className="bg-blue-500 text-white px-4 py-2 rounded-md mt-2"
+        className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200 w-full sm:w-auto"
       >
         Send Message
       </button>

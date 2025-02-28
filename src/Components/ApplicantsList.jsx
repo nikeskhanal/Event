@@ -56,30 +56,42 @@ const ApplicantsList = () => {
     }
   };
 
-  if (loading) return <div>Loading applications...</div>;
-  if (error) return <div>{error}</div>;
-  if (applications.length === 0) return <div>No applicants for this job yet.</div>;
+  if (loading) return <div className="text-center text-gray-500">Loading applications...</div>;
+  if (error) return <div className="text-center text-red-500">{error}</div>;
+  if (applications.length === 0) return <div className="text-center text-gray-500">No applicants for this job yet.</div>;
 
   return (
-    <div>
-      <h2>Applicants for Job {jobId}</h2>
+    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+      <h2 className="text-3xl font-semibold text-center mb-6">Applicants </h2>
+
       <ul>
         {applications.map((application) => (
           <li
             key={application._id}
-            className="mb-4 p-4 border border-gray-300 rounded-lg"
+            className="mb-6 p-6 border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition duration-300"
           >
-            <div>
-              <strong>{application.user.name}</strong> ({application.user.email})
+            <div className="flex justify-between items-center mb-4">
+              <div>
+                <strong className="text-xl text-gray-800">{application.user.name}</strong>
+                <div className="text-gray-600">{application.user.email}</div>
+                <div className="text-sm text-gray-500">Applied at: {new Date(application.appliedAt).toLocaleString()}</div>
+              </div>
+              {/* View Profile Button */}
+              <button
+                onClick={() => alert(`View profile of ${application.user.name}`)} // Implement navigation or modal as needed
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
+              >
+                View Profile
+              </button>
             </div>
-            <div>Applied at: {new Date(application.appliedAt).toLocaleString()}</div>
-            <div className="mt-2">
+
+            <div className="flex items-center space-x-4 mt-4">
               <SendMessage
                 applicantId={application.user._id}
                 sendNotification={sendNotification}
               />
               {notificationStatus[application.user._id] && (
-                <div className="mt-2 text-sm text-green-500">
+                <div className="text-sm text-green-500">
                   {notificationStatus[application.user._id] === 'Sent'
                     ? 'Notification Sent!'
                     : 'Failed to send notification'}

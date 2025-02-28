@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const MyCreatedHackathon = () => {
   const [hackathons, setHackathons] = useState([]);
   const [error, setError] = useState(null);
   const [participantsVisibility, setParticipantsVisibility] = useState({});
+  const navigate = useNavigate();
 
   // Fetch the hackathons created by the logged-in user
   useEffect(() => {
@@ -32,6 +34,11 @@ const MyCreatedHackathon = () => {
     }));
   };
 
+  // Navigate to HackathonParticipantList
+  const viewParticipants = (hackathonId) => {
+    navigate(`/hackathon/${hackathonId}/participants`);
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
       <h2 className="text-2xl font-semibold text-center mb-6">My Created Hackathons</h2>
@@ -52,29 +59,11 @@ const MyCreatedHackathon = () => {
 
               {/* Participants Button */}
               <button
-                onClick={() => toggleParticipants(hackathon._id)}
+                onClick={() => viewParticipants(hackathon._id)}
                 className="bg-blue-500 text-white px-4 py-2 rounded mt-4"
               >
-                {participantsVisibility[hackathon._id] ? 'Hide Participants' : 'Show Participants'}
+                View Participants
               </button>
-
-              {/* Show Participants if button is clicked */}
-              {participantsVisibility[hackathon._id] && (
-                <div className="mt-4">
-                  <h4 className="text-lg font-semibold">Participants</h4>
-                  <ul className="space-y-2 mt-2">
-                    {hackathon.participants && hackathon.participants.length > 0 ? (
-                      hackathon.participants.map((participant, index) => (
-                        <li key={index} className="text-gray-600">
-                          {participant.user.name} ({participant.user.email})
-                        </li>
-                      ))
-                    ) : (
-                      <li className="text-gray-500">No participants yet</li>
-                    )}
-                  </ul>
-                </div>
-              )}
             </div>
           ))
         ) : (

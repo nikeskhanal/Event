@@ -13,7 +13,7 @@ import Hackathons from './Components/Hackathons';
 import Internship from './Components/Internship';
 import JobForm from './Components/JobForm';
 import QuizPlay from './Components/QuizPlay';
-import JobList from './Components/Joblist';
+import JobList from './Components/JobList';
 import ApplicantsList from './Components/ApplicantsList';
 import MyPostedJobs from './Components/MyPostedJobs';
 import SendMessage from './Components/SendMessage';
@@ -21,6 +21,7 @@ import QuizResult from './Components/Quizresult';
 import MyPostedQuiz from './Components/MyPostedQuiz';
 import CreateHackathon from './Components/CreateHackathon';
 import MyCreatedHackathon from './Components/MyCreatedHackathon';
+import HackathonParticipantList from './Components/HackathonParticipantList';
 
 const App = () => {
     return (
@@ -45,7 +46,7 @@ const App = () => {
                 <Route path="/my-hackathons" element={<MyCreatedHackathon/>} />
                 <Route path="/quiz/results/:quizId" element={<QuizResult />} />
                 <Route path="/create-hackathon" element={<CreateHackathon />} />
-
+                <Route path="/hackathon/:hackathonId/participants" element={<HackathonParticipantList />} />
                 
                 {/* Updated routes */}
                 <Route path="/:id/recruiter-home/my-posted-jobs" element={<MyPostedJobs />} />
