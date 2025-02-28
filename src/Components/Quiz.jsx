@@ -1,205 +1,208 @@
-import React, { useState } from 'react';
-import Navbar from './Navbar';
-import axios from 'axios';
+import { useState } from "react"; 
+import axios from "axios";
 
 const Quiz = () => {
-  const [questions, setQuestions] = useState([]);
-  const [currentQuestion, setCurrentQuestion] = useState('');
-  const [options, setOptions] = useState(['', '', '', '']);
-  const [correctAnswer, setCorrectAnswer] = useState('');
-  const [quizTitle, setQuizTitle] = useState('');
-  const [quizDescription, setQuizDescription] = useState('');
-  const [errors, setErrors] = useState({});
+  const [quizData, setQuizData] = useState({
+    title: "",
+    description: "",
+    questions: [],
+  });
+  const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleQuestionChange = (e) => {
-    setCurrentQuestion(e.target.value);
+  const addQuestion = () => {
+    setQuizData({
+      ...quizData,
+      questions: [...quizData.questions, { questionText: "", options: [] }],
+    });
   };
 
-  const handleOptionChange = (index, value) => {
-    const updatedOptions = [...options];
-    updatedOptions[index] = value;
-    setOptions(updatedOptions);
+  const removeQuestion = (qIndex) => {
+    const updatedQuestions = quizData.questions.filter((_, index) => index !== qIndex);
+    setQuizData({ ...quizData, questions: updatedQuestions });
   };
 
-  const handleCorrectAnswerChange = (e) => {
-    setCorrectAnswer(Number(e.target.value)); // Ensure correctAnswer is stored as a number
-  };
-
-  const handleAddQuestion = () => {
-    if (
-      currentQuestion.trim() &&
-      options.every((opt) => opt.trim()) &&
-      correctAnswer !== ''
-    ) {
-      setQuestions([
-        ...questions,
-        { question: currentQuestion, options, correctAnswer },
-      ]);
-      setCurrentQuestion('');
-      setOptions(['', '', '', '']);
-      setCorrectAnswer('');
-    } else {
-      alert('Please fill in the question, all options, and select a correct answer!');
+  const addOption = (qIndex) => {
+    const updatedQuestions = [...quizData.questions];
+    if (updatedQuestions[qIndex].options.length < 4) {
+      updatedQuestions[qIndex].options.push({ optionText: "", isCorrect: false });
+      setQuizData({ ...quizData, questions: updatedQuestions });
     }
   };
 
-  const handleSubmitQuiz = async () => {
-    let newErrors = {};
-    if (!quizTitle.trim()) newErrors.title = 'Title is required.';
-    if (!quizDescription.trim()) newErrors.description = 'Description is required.';
-    if (questions.length === 0) newErrors.questions = 'Add at least one question.';
-    setErrors(newErrors);
+  const removeOption = (qIndex, oIndex) => {
+    const updatedQuestions = [...quizData.questions];
+    updatedQuestions[qIndex].options = updatedQuestions[qIndex].options.filter((_, index) => index !== oIndex);
+    setQuizData({ ...quizData, questions: updatedQuestions });
+  };
 
-    if (Object.keys(newErrors).length > 0) return;
+  const handleChange = (e) => {
+    setQuizData({ ...quizData, [e.target.name]: e.target.value });
+  };
+
+  const handleQuestionChange = (qIndex, value) => {
+    const updatedQuestions = [...quizData.questions];
+    updatedQuestions[qIndex].questionText = value;
+    setQuizData({ ...quizData, questions: updatedQuestions });
+  };
+
+  const handleOptionChange = (qIndex, oIndex, value) => {
+    const updatedQuestions = [...quizData.questions];
+    updatedQuestions[qIndex].options[oIndex].optionText = value;
+    setQuizData({ ...quizData, questions: updatedQuestions });
+  };
+
+  const handleOptionCorrectness = (qIndex, oIndex) => {
+    const updatedQuestions = [...quizData.questions];
+    updatedQuestions[qIndex].options.forEach((opt, i) => {
+      opt.isCorrect = i === oIndex;
+    });
+    setQuizData({ ...quizData, questions: updatedQuestions });
+  };
+
+  const validateQuiz = () => {
+    if (!quizData.title || !quizData.description) return "Title and description are required.";
+    for (const question of quizData.questions) {
+      if (!question.questionText) return "Each question must have text.";
+      if (question.options.length < 2) return "Each question must have at least two options.";
+      if (!question.options.some((opt) => opt.isCorrect)) return "Each question must have at least one correct answer.";
+    }
+    return null;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const error = validateQuiz();
+    if (error) {
+      setMessage({ type: "error", text: error });
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setMessage({ type: "error", text: "You must be logged in to create a quiz." });
+      return;
+    }
+
+    setLoading(true);
 
     try {
-      setLoading(true);
-
-      const quizId = `quiz-${Date.now()}`; // Example: Unique quizId generation based on current time
-
-      const response = await axios.post('http://localhost:4000/api/quiz', {
-        quizId,
-        title: quizTitle,
-        description: quizDescription,
-        questions,
+      await axios.post("http://localhost:4000/api/quiz/create", quizData, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-
-      console.log('Quiz submitted successfully:', response.data);
-      alert('Quiz submitted successfully');
-      setQuizTitle('');
-      setQuizDescription('');
-      setQuestions([]);
-      setErrors({});
+      setMessage({ type: "success", text: "Quiz created successfully!" });
+      setQuizData({ title: "", description: "", questions: [] });
+      setTimeout(() => setMessage(null), 5000);
     } catch (error) {
-      console.error(
-        'Error submitting quiz:',
-        error.response ? error.response.data : error.message
-      );
-      alert('Error submitting quiz.');
+      console.error("Error creating quiz", error);
+      setMessage({ type: "error", text: "Failed to create quiz. Please try again." });
     } finally {
       setLoading(false);
     }
   };
 
+  const confirmRemoval = (action) => {
+    if (window.confirm("Are you sure you want to remove this item?")) {
+      action();
+    }
+  };
+
+  const isFormValid = quizData.title && quizData.description && quizData.questions.length > 0 && !validateQuiz();
+
   return (
-    <div>
-      <Navbar />
-      <div className="min-h-screen bg-gray-100 p-4">
-        <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
-          <h2 className="text-2xl font-bold mb-6">Create a Quiz</h2>
+    <div className="max-w-2xl mx-auto p-6 bg-white rounded shadow">
+      <h2 className="text-2xl font-bold mb-4">Create a Quiz</h2>
 
-          {/* Quiz Title */}
-          <div className="mb-6">
-            <label className="block mb-2 font-medium">Quiz Title</label>
+      {message && (
+        <div className={`p-2 mb-4 rounded text-white ${message.type === "success" ? "bg-green-500" : "bg-red-500"}`}>
+          {message.text}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="title"
+          placeholder="Quiz Title"
+          value={quizData.title}
+          onChange={handleChange}
+          className="w-full p-2 border rounded mb-3"
+          required
+        />
+        <textarea
+          name="description"
+          placeholder="Quiz Description"
+          value={quizData.description}
+          onChange={handleChange}
+          className="w-full p-2 border rounded mb-3"
+          required
+        ></textarea>
+
+        {quizData.questions.map((q, qIndex) => (
+          <div key={qIndex} className="mb-4 p-4 border rounded">
             <input
               type="text"
-              value={quizTitle}
-              onChange={(e) => setQuizTitle(e.target.value)}
-              className={`w-full p-2 border rounded ${errors.title ? 'border-red-500' : ''}`}
-              placeholder="Enter quiz title"
+              placeholder="Question Text"
+              value={q.questionText}
+              onChange={(e) => handleQuestionChange(qIndex, e.target.value)}
+              className="w-full p-2 border rounded mb-2"
+              required
             />
-            {errors.title && <p className="text-red-500 text-sm mt-1">{errors.title}</p>}
-          </div>
-
-          {/* Quiz Description */}
-          <div className="mb-6">
-            <label className="block mb-2 font-medium">Quiz Description</label>
-            <textarea
-              value={quizDescription}
-              onChange={(e) => setQuizDescription(e.target.value)}
-              className={`w-full p-2 border rounded ${errors.description ? 'border-red-500' : ''}`}
-              placeholder="Enter quiz description"
-            />
-            {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
-          </div>
-
-          {/* Question */}
-          <div className="mb-6">
-            <label className="block mb-2 font-medium">Question</label>
-            <input
-              type="text"
-              value={currentQuestion}
-              onChange={handleQuestionChange}
-              className="w-full p-2 border rounded"
-              placeholder="Enter your question"
-            />
-          </div>
-
-          {/* Options */}
-          <div className="grid grid-cols-2 gap-4">
-            {options.map((option, index) => (
-              <div key={index} className="mb-4">
-                <label className="block mb-2 font-medium">Option {index + 1}</label>
+            {q.options.map((opt, oIndex) => (
+              <div key={oIndex} className="flex items-center mb-2">
                 <input
                   type="text"
-                  value={option}
-                  onChange={(e) => handleOptionChange(index, e.target.value)}
+                  placeholder="Option Text"
+                  value={opt.optionText}
+                  onChange={(e) => handleOptionChange(qIndex, oIndex, e.target.value)}
                   className="w-full p-2 border rounded"
-                  placeholder={`Enter option ${index + 1}`}
+                  required
                 />
+                <input
+                  type="radio"
+                  name={`correct-${qIndex}`}
+                  checked={opt.isCorrect}
+                  onChange={() => handleOptionCorrectness(qIndex, oIndex)}
+                  className="ml-2"
+                />
+                <button
+                  type="button"
+                  onClick={() => confirmRemoval(() => removeOption(qIndex, oIndex))}
+                  className="ml-2 text-red-500"
+                >
+                  ✖
+                </button>
               </div>
             ))}
-          </div>
-
-          {/* Correct Answer */}
-          <div className="mb-6">
-            <label className="block mb-2 font-medium">Select Correct Answer</label>
-            <select
-              value={correctAnswer}
-              onChange={handleCorrectAnswerChange}
-              className="w-full p-2 border rounded"
-            >
-              <option value="">Select Correct Answer</option>
-              {options.map((option, index) => (
-                <option key={index} value={index}>
-                  {String.fromCharCode(65 + index)}. {option}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Add Question */}
-          <button
-            onClick={handleAddQuestion}
-            className="px-4 py-2 bg-blue-500 text-white font-semibold rounded hover:bg-blue-600"
-          >
-            Add Question
-          </button>
-
-          {/* Questions Added */}
-          <div className="mt-6">
-            <h3 className="text-lg font-bold mb-4">Questions Added:</h3>
-            {questions.map((item, index) => (
-              <div key={index} className="mb-4 p-4 border rounded bg-gray-50">
-                <p className="font-medium">
-                  {index + 1}. {item.question}
-                </p>
-                <ul className="mt-2">
-                  {item.options.map((opt, optIndex) => (
-                    <li key={optIndex} className="text-gray-700">
-                      {String.fromCharCode(65 + optIndex)}. {opt}
-                      {optIndex === item.correctAnswer && (
-                        <span className="text-green-500 ml-2">(Correct)</span>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-
-          {/* Submit Button */}
-          {questions.length > 0 && (
             <button
-              onClick={handleSubmitQuiz}
-              className="mt-4 px-4 py-2 bg-green-500 text-white font-semibold rounded hover:bg-green-600"
+              type="button"
+              onClick={() => addOption(qIndex)}
+              className="text-blue-500 mt-2"
+              disabled={q.options.length >= 4}
             >
-              {loading ? 'Submitting...' : 'Submit Quiz'}
+              + Add Option
             </button>
-          )}
-        </div>
-      </div>
+            <button
+              type="button"
+              onClick={() => confirmRemoval(() => removeQuestion(qIndex))}
+              className="text-red-500 ml-4"
+            >
+              Remove Question
+            </button>
+          </div>
+        ))}
+
+        <button type="button" onClick={addQuestion} className="text-green-500 mb-4" disabled={quizData.questions.length >= 10}>
+          + Add Question
+        </button>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white p-2 rounded w-full"
+          disabled={!isFormValid || loading}
+        >
+          {loading ? "Creating..." : "Create Quiz"}
+        </button>
+      </form>
     </div>
   );
 };

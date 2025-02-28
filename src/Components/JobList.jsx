@@ -8,19 +8,19 @@ const JobList = () => {
   const [loading, setLoading] = useState(true);
   const [appliedJobs, setAppliedJobs] = useState([]);
 
-  // Fetch jobs from the backend API
+  
   useEffect(() => {
   const fetchJobs = async () => {
   try {
     const response = await axios.get('http://localhost:4000/api/jobs');
     if (response.data.jobs) {
-      setJobs(response.data.jobs); // Assuming the response contains a jobs array
+      setJobs(response.data.jobs);
     } else {
       setError('No jobs available.');
     }
     setLoading(false);
   } catch (err) {
-    // Check if the error is related to the network
+    
     if (!err.response) {
       setError('Network Error. Please check your connection.');
     } else {
@@ -59,7 +59,7 @@ const JobList = () => {
       );
       
       setSuccess(response.data.message);
-      setAppliedJobs((prev) => [...prev, jobId]); // Track applied jobs
+      setAppliedJobs((prev) => [...prev, jobId]); 
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to apply for the job. Please try again later.');
     }

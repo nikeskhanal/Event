@@ -17,6 +17,10 @@ import JobList from './Components/Joblist';
 import ApplicantsList from './Components/ApplicantsList';
 import MyPostedJobs from './Components/MyPostedJobs';
 import SendMessage from './Components/SendMessage';
+import QuizResult from './Components/Quizresult';
+import MyPostedQuiz from './Components/MyPostedQuiz';
+import CreateHackathon from './Components/CreateHackathon';
+import MyCreatedHackathon from './Components/MyCreatedHackathon';
 
 const App = () => {
     return (
@@ -30,14 +34,18 @@ const App = () => {
                 <Route path='/notification' element={<Notifi />} />
                 <Route path='/usernav' element={<UserNav />} />
                 <Route path='/userNoti' element={<UserNoti />} />
-                <Route path="/play-quiz/:quizId" element={<QuizPlay />} />
+                <Route path="/play-quiz" element={<QuizPlay />} />
                 <Route path='/joblist' element={<JobList />} />
                 <Route path='/quiz' element={<Quiz />} />
                 <Route path='/hackathons' element={<Hackathons />} />
                 <Route path='/internship' element={<Internship />} />
                 <Route path='/jobform' element={<JobForm />} />
                 <Route path='/sendmessage' element={<SendMessage />} />
-               
+                <Route path="/my-quizzes" element={<MyPostedQuiz/>} />
+                <Route path="/my-hackathons" element={<MyCreatedHackathon/>} />
+                <Route path="/quiz/results/:quizId" element={<QuizResult />} />
+                <Route path="/create-hackathon" element={<CreateHackathon />} />
+
                 
                 {/* Updated routes */}
                 <Route path="/:id/recruiter-home/my-posted-jobs" element={<MyPostedJobs />} />

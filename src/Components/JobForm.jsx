@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { use } from 'react';
 
 const JobForm = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [salary , setSalary] =useState('');
   const [company, setCompany] = useState('');
   const [location, setLocation] = useState('');
   const [error, setError] = useState('');
@@ -13,7 +15,7 @@ const JobForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    if (!title || !description || !company || !location) {
+    if (!title || !description || !company || !location ||!salary) {
       setError('Please fill in all fields');
       setSuccess('');
       return;
@@ -22,11 +24,11 @@ const JobForm = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const API_URL = 'http://localhost:4000'; // Hardcoded default URL
+      const API_URL = 'http://localhost:4000'; 
 
       const response = await axios.post(
         `${API_URL}/api/jobs/create`,
-        { title, description, company, location },
+        { title, description, company, location, salary},
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -35,13 +37,14 @@ const JobForm = () => {
         }
       );
   
-      console.log('Response data:', response.data); // Log response for debugging
+      console.log('Response data:', response.data); 
   
       setSuccess('Job posted successfully!');
       setError('');
       setTitle('');
       setDescription('');
       setCompany('');
+      setSalary('');
       setLocation('');
     } catch (err) {
       console.error('Error:', err.response || err); // Log error details
@@ -119,6 +122,21 @@ const JobForm = () => {
             className="mt-1 w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
+
+        <div>
+          <label htmlFor="salary" className="block text-gray-700 font-medium">
+            Salary
+          </label>
+          <input
+            id="salary"
+            type="text"
+            value={salary}
+            onChange={(e) => setSalary(e.target.value)}
+            className="mt-1 w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+
         <div>
           <button
             type="submit"
