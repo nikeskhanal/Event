@@ -48,14 +48,20 @@ const Profile = () => {
         ...formData,
         photo: file,
       });
+  
+      // Show preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUser((prev) => ({ ...prev, photo: reader.result }));
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const userId = user._id; // Assuming `user._id` is the unique identifier for the user
+    const userId = user._id;
 
-    // Create a FormData object for the profile update
     const data = new FormData();
     data.append('name', formData.name);
     data.append('bio', formData.bio);
@@ -68,7 +74,6 @@ const Profile = () => {
       data.append('photo', formData.photo);
     }
 
-    // API request to update the profile
     axios
       .put(`http://localhost:4000/api/updateUser/${userId}`, data, {
         headers: {
@@ -85,26 +90,21 @@ const Profile = () => {
       });
   };
 
-
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-3xl font-semibold text-center mb-6">User Profile</h2>
-      <div className="flex flex-col items-center">
+    <div className="max-w-4xl mx-auto p-8 bg-white rounded-2xl shadow-lg">
+      <h2 className="text-3xl font-semibold text-center text-gray-800 mb-8">User Profile</h2>
+      <div className="flex flex-col items-center space-y-6">
         {/* Profile Picture */}
-        <img
-          src={user.photo ? 
-          
-            <img src={`http://localhost:5000/${user.photo}`} alt="User Profile" />
-
-          
-          
-           : '/default-photo.jpg'}
-          alt="Profile"
-          className="w-32 h-32 rounded-full object-cover mb-4"
-        />
+        <div className="relative">
+          <img
+            src={user.photo ? `http://localhost:4000/uploads/${user.photo}` : '/default-photo.jpg'}
+            alt="Profile"
+            className="w-36 h-36 rounded-full object-cover border-4 border-indigo-600"
+          />
+        </div>
 
         {isEditing ? (
-          <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md">
+          <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-md">
             <div>
               <label className="block text-sm font-medium text-gray-700">Name</label>
               <input
@@ -112,7 +112,7 @@ const Profile = () => {
                 name="name"
                 value={formData.name || ''}
                 onChange={handleInputChange}
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
 
@@ -123,7 +123,7 @@ const Profile = () => {
                 name="email"
                 value={user.email || ''}
                 disabled
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+                className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-gray-100"
               />
             </div>
 
@@ -133,7 +133,7 @@ const Profile = () => {
                 name="bio"
                 value={formData.bio || ''}
                 onChange={handleInputChange}
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+                className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
 
@@ -144,7 +144,7 @@ const Profile = () => {
                 name="skills"
                 value={formData.skills || ''}
                 onChange={handleInputChange}
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+                className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
 
@@ -155,7 +155,7 @@ const Profile = () => {
                 name="location"
                 value={formData.location || ''}
                 onChange={handleInputChange}
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+                className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
 
@@ -166,7 +166,7 @@ const Profile = () => {
                 name="education"
                 value={formData.education || ''}
                 onChange={handleInputChange}
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+                className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
 
@@ -177,7 +177,7 @@ const Profile = () => {
                 name="job"
                 value={formData.job || ''}
                 onChange={handleInputChange}
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+                className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
 
@@ -187,31 +187,31 @@ const Profile = () => {
                 type="file"
                 name="photo"
                 onChange={handleFileChange}
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm"
+                className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
 
-            <div className="text-center mt-4">
+            <div className="text-center mt-6">
               <button
                 type="submit"
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700"
+                className="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition duration-200"
               >
                 Save Changes
               </button>
             </div>
           </form>
         ) : (
-          <div className="text-center">
-            <p className="text-lg font-semibold">Name: {user.name}</p>
-            <p>Email: {user.email}</p>
-            <p>Bio: {user.bio}</p>
-            <p>Skills: {user.skills}</p>
-            <p>Location: {user.location}</p>
-            <p>Education: {user.education}</p>
-            <p>Job: {user.job}</p>
+          <div className="space-y-4 text-center">
+            <p className="text-lg font-semibold text-gray-800">Name: {user.name}</p>
+            <p className="text-gray-600">Email: {user.email}</p>
+            <p className="text-gray-600">Bio: {user.bio}</p>
+            <p className="text-gray-600">Skills: {user.skills}</p>
+            <p className="text-gray-600">Location: {user.location}</p>
+            <p className="text-gray-600">Education: {user.education}</p>
+            <p className="text-gray-600">Job: {user.job}</p>
             <button
               onClick={() => setIsEditing(true)}
-              className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
             >
               Edit Profile
             </button>
