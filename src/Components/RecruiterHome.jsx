@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from './Navbar'; // Import the Navbar component
-import ApplicantsList from './ApplicantsList';
-import MyPostedJobs from './MyPostedJobs';
+import Navbar from './Navbar';
 
+import MyPostedJobs from './MyPostedJobs';
 import MyPostedQuiz from './MyPostedQuiz';
 import MyCreatedHackathon from './MyCreatedHackathon';
 
@@ -18,55 +17,64 @@ const RecruiterHome = () => {
   return (
     <div>
       <Navbar />
-      <MyPostedJobs/>
-      <MyPostedQuiz/>
-      <MyCreatedHackathon/>
-      <div className="min-h-screen bg-gray-100 flex justify-center items-center">
-        <div className="w-full max-w-sm p-6 bg-white rounded shadow">
-          <div className="relative">
-            <button
-              aria-expanded={isDropdownOpen}
-              aria-controls="dropdown-menu"
-              className="w-full py-2 px-4 bg-gray-200 text-gray-700 font-semibold rounded hover:bg-gray-300 transition ease-in-out duration-200"
-              onClick={toggleDropdown}
-            >
-              Create New
-            </button>
-            {isDropdownOpen && (
-              <ul
-                id="dropdown-menu"
-                className="absolute w-full mt-2 bg-white border rounded shadow z-10"
-              >
-                <li
-                  className="py-2 px-4 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => navigate('/jobform')}
-                >
-                  Jobs
-                </li>
-                <li
-                  className="py-2 px-4 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => navigate('/quiz')}
-                >
-                  Quiz
-                </li>
-                <li
-                  className="py-2 px-4 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => navigate('/internship')}
-                >
-                  Internship
-                </li>
-                <li
-                  className="py-2 px-4 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => navigate('/create-hackathon')}
-                >
-                  Hackathons
-                </li>
-              </ul>
-            )}
-          </div>
-        </div>
+      
+   
+      <div className="flex justify-center space-x-4 my-6">
+        <button className="px-6 py-2 bg-blue-500 text-white rounded shadow" onClick={() => navigate('/:id/recruiter-home/my-posted-jobs')}>
+          My Posted Jobs
+        </button>
+        <button className="px-6 py-2 bg-green-500 text-white rounded shadow" onClick={() => navigate('/my-quizzes')}>
+          My Posted Quiz
+        </button>
+        <button className="px-6 py-2 bg-purple-500 text-white rounded shadow" onClick={() => navigate('/my-hackathons')}>
+          My Created Hackathon
+        </button>
       </div>
-    </div>
+
+      <div className="flex justify-center my-4">
+  <div className="relative">
+  <div className="flex justify-center my-6">
+  <button
+    aria-expanded={isDropdownOpen}
+    aria-controls="dropdown-menu"
+    className="px-8 py-3 text-lg bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
+    onClick={toggleDropdown}
+  >
+    + Create New
+  </button>
+</div>
+
+{isDropdownOpen && (
+  <div className="flex justify-center">
+    <ul className="absolute mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+      <li
+        className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
+        onClick={() => navigate('/jobform')}
+      >
+        Jobs
+      </li>
+      <li
+        className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
+        onClick={() => navigate('/quiz')}
+      >
+        Quiz
+      </li>
+      <li
+        className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-700"
+        onClick={() => navigate('/create-hackathon')}
+      >
+        Hackathons
+      </li>
+    </ul>
+  </div>
+)}
+{/* 
+    <MyPostedJobs/>
+    <MyPostedQuiz/>
+    <MyCreatedHackathon/> */}
+  </div>
+</div>
+</div>
   );
 };
 

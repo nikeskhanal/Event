@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Navbar from './Navbar';
 
 const MyCreatedHackathon = () => {
   const [hackathons, setHackathons] = useState([]);
@@ -40,6 +41,27 @@ const MyCreatedHackathon = () => {
   };
 
   return (
+  <div >
+
+   
+<div className="flex justify-center space-x-4 my-6">
+<button
+          className="px-6 py-2 bg-gray-500 text-white rounded shadow hover:bg-gray-600"
+          onClick={() => navigate("/:id/recruiter-home")}
+        >
+          Back to Home Page
+        </button>
+        <button className="px-6 py-2 bg-blue-500 text-white rounded shadow" onClick={() => navigate('/:id/recruiter-home/my-posted-jobs')}>
+          My Posted Jobs
+        </button>
+        <button className="px-6 py-2 bg-green-500 text-white rounded shadow" onClick={() => navigate('/my-quizzes')}>
+          My Posted Quiz
+        </button>
+        <button className="px-6 py-2 bg-purple-500 text-white rounded shadow" onClick={() => navigate('/my-hackathons')}>
+          My Created Hackathon
+        </button>
+      </div>
+  
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
       <h2 className="text-2xl font-semibold text-center mb-6">My Created Hackathons</h2>
 
@@ -70,6 +92,7 @@ const MyCreatedHackathon = () => {
           <div className="text-center text-gray-500">You have not created any hackathons yet.</div>
         )}
       </div>
+    </div>
     </div>
   );
 };

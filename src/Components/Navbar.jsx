@@ -5,21 +5,22 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        // Handle logout logic here
+       
         console.log('Logged out');
         navigate('/'); // Redirect to login page
     };
 
     return (
-        <nav className="bg-blue-500 p-4 shadow-md">
+        <nav className="bg-gray-500 p-4 shadow-md">
+            
             <div className="container mx-auto flex justify-between items-center">
                 <h1 className="text-white text-2xl font-bold">
-                    <NavLink to="/recruiter-home">MyApp</NavLink>
+                   
                 </h1>
                 <ul className="flex space-x-6">
                     <li>
                         <NavLink
-                            to="/recruiter-home"
+                            to="/id:/recruiter-home"
                             className={({ isActive }) =>
                                 isActive ? 'text-gray-200 font-bold' : 'text-white hover:text-gray-200'
                             }

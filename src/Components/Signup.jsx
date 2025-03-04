@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate,Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -41,9 +41,12 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Sign Up</h2>
+    <div className="h-screen flex flex-col items-center justify-center bg-gray-100" style={{ backgroundImage: 'url("./src/assets/bgg.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      
+      <h2 className="text-6xl font-semibold text-center text-white animate-pulse mb-6">Welcome to Event Manager</h2>
+
+      <div className="max-w-md mx-auto p-6  bg-white bg-opacity-50 rounded-lg shadow-lg">
+        <h3 className="text-2xl font-semibold text-center text-gray-700 mb-6">Sign Up</h3>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name Field */}
@@ -112,21 +115,22 @@ const Signup = () => {
             </button>
           </div>
         </form>
-     
 
         {/* Display Success or Error Message */}
         {message && <p className="mt-4 text-center text-sm font-medium text-red-600">{message}</p>}
 
-        <p className="mt-4 text-center text-sm text-gray-600">
-                    Already Have an Account?{' '}
-                    <Link to="/" className="text-blue-500 hover:underline">
-                        Log in
-                    </Link>
-                </p>
+        {/* Link to Login page */}
+        <div className="flex justify-center mt-4">
+          <p className="text-center text-sm text-gray-600">
+            Already Have an Account?{' '}
+            <Link to="/" className="text-blue-500 hover:underline ml-1">
+              Log in
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
 };
-
 
 export default Signup;

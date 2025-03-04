@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Navbar from './Navbar';
 
 const Profile = () => {
   const [user, setUser] = useState({
@@ -91,6 +92,8 @@ const Profile = () => {
   };
 
   return (
+    <div>
+      <Navbar/>
     <div className="max-w-4xl mx-auto p-8 bg-white rounded-2xl shadow-lg">
       <h2 className="text-3xl font-semibold text-center text-gray-800 mb-8">User Profile</h2>
       <div className="flex flex-col items-center space-y-6">
@@ -169,7 +172,7 @@ const Profile = () => {
                 className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
-
+          
             <div>
               <label className="block text-sm font-medium text-gray-700">Job</label>
               <input
@@ -218,6 +221,7 @@ const Profile = () => {
           </div>
         )}
       </div>
+    </div>
     </div>
   );
 };
