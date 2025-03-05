@@ -34,6 +34,7 @@ const App = () => {
                 <Route path='/Profile' element={<Profile />} />
                 <Route path='/notification' element={<Notifi />} />
                 <Route path='/usernav' element={<UserNav />} />
+                <Route path='/userprofile' element= {<UserPorfile/>}/>
                 <Route path='/userNoti' element={<UserNoti />} />
                 <Route path="/play-quiz" element={<QuizPlay />} />
                 <Route path='/joblist' element={<JobList />} />
