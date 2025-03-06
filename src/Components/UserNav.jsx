@@ -47,7 +47,7 @@ const UserNav = () => {
                     </li>
                     <li>
                         <NavLink
-                            to="/userprofile"
+                            to="/userprofile/:id/"
                             className={({ isActive }) => `flex items-center gap-2 ${isActive ? 'text-blue-400' : 'hover:text-gray-300'}`}
                         >
                             <User size={20} /> Profile
@@ -55,7 +55,7 @@ const UserNav = () => {
                     </li>
                     <li className="relative">
                         <NavLink
-                            to="/notification"
+                            to="/usernoti"
                             className={({ isActive }) => `flex items-center gap-2 ${isActive ? 'text-blue-400' : 'hover:text-gray-300'}`}
                         >
                             <Bell size={20} /> Notifications

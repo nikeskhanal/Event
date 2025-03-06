@@ -31,29 +31,33 @@ const App = () => {
                 <Route path="/:id/recruiter-home" element={<RecruiterHome />} />
                 <Route path="/:id/user-home" element={<UserHome />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route path='/Profile' element={<Profile />} />
-                <Route path='/notification' element={<Notifi />} />
-                <Route path='/usernav' element={<UserNav />} />
-                <Route path='/userprofile' element= {<UserPorfile/>}/>
-                <Route path='/userNoti' element={<UserNoti />} />
+                
+                {/* Profile route should be dynamic */}
+                <Route path="/profile/:userId" element={<Profile />} />
+
+                <Route path="/notification" element={<Notifi />} />
+                <Route path="/usernav" element={<UserNav />} />
+                <Route path="/userprofile/:userId" element={<UserPorfile />} />
+                <Route path="/userNoti" element={<UserNoti />} />
                 <Route path="/play-quiz" element={<QuizPlay />} />
-                <Route path='/joblist' element={<JobList />} />
-                <Route path='/quiz' element={<Quiz />} />
-                <Route path='/hackathons' element={<Hackathons />} />
-                <Route path='/internship' element={<Internship />} />
-                <Route path='/jobform' element={<JobForm />} />
-                <Route path='/sendmessage' element={<SendMessage />} />
-                <Route path="/my-quizzes" element={<MyPostedQuiz/>} />
-                <Route path="/my-hackathons" element={<MyCreatedHackathon/>} />
+                <Route path="/joblist" element={<JobList />} />
+                <Route path="/quiz" element={<Quiz />} />
+                <Route path="/hackathons" element={<Hackathons />} />
+                <Route path="/internship" element={<Internship />} />
+                <Route path="/jobform" element={<JobForm />} />
+
+                {/* Send message to a specific user */}
+                <Route path="/sendmessage/:userId" element={<SendMessage />} />
+
+                <Route path="/my-quizzes" element={<MyPostedQuiz />} />
+                <Route path="/my-hackathons" element={<MyCreatedHackathon />} />
                 <Route path="/quiz/results/:quizId" element={<QuizResult />} />
                 <Route path="/create-hackathon" element={<CreateHackathon />} />
                 <Route path="/hackathon/:hackathonId/participants" element={<HackathonParticipantList />} />
-                
+
                 {/* Updated routes */}
                 <Route path="/:id/recruiter-home/my-posted-jobs" element={<MyPostedJobs />} />
-               
                 <Route path="/job/:jobId/applicants" element={<ApplicantsList />} />
-
             </Routes>
         </Router>
     );
