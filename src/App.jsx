@@ -7,7 +7,6 @@ import Profile from './Components/Profile';
 import UserNav from './Components/UserNav';
 import UserNoti from './Components/UserNoti';
 import UserPorfile from './Components/UserPorfile';
-import Notifi from './Components/Notifi';
 import Quiz from './Components/Quiz';
 import Hackathons from './Components/Hackathons';
 import Internship from './Components/Internship';
@@ -22,6 +21,7 @@ import MyPostedQuiz from './Components/MyPostedQuiz';
 import CreateHackathon from './Components/CreateHackathon';
 import MyCreatedHackathon from './Components/MyCreatedHackathon';
 import HackathonParticipantList from './Components/HackathonParticipantList';
+import FetchProfile from './Components/Fetchprofile';
 
 const App = () => {
     return (
@@ -33,11 +33,12 @@ const App = () => {
                 <Route path="/signup" element={<Signup />} />
                 
                 {/* Profile route should be dynamic */}
-                <Route path="/profile/:userId" element={<Profile />} />
+                <Route path="/profile" element={<Profile />} />
 
-                <Route path="/notification" element={<Notifi />} />
+                
+                <Route path="/profilees" element={<FetchProfile />} />
                 <Route path="/usernav" element={<UserNav />} />
-                <Route path="/userprofile/:userId" element={<UserPorfile />} />
+                <Route path="/userprofile/:id" element={<UserPorfile />} />
                 <Route path="/userNoti" element={<UserNoti />} />
                 <Route path="/play-quiz" element={<QuizPlay />} />
                 <Route path="/joblist" element={<JobList />} />

@@ -11,6 +11,10 @@ const SendMessage = ({ applicantId, sendNotification }) => {
       setStatus({ type: 'error', message: 'Message cannot be empty.' });
       return;
     }
+    if (message.length < 5) {
+      setStatus({ type: 'error', message: 'Message must be at least 5 characters long.' });
+      return;
+    }
 
     setLoading(true); // Start loading
 
@@ -19,7 +23,7 @@ const SendMessage = ({ applicantId, sendNotification }) => {
       setStatus({ type: 'success', message: 'Message sent successfully!' });
       setMessage('');
     } catch (err) {
-      setStatus({ type: 'error', message: 'Failed to send message. Please try again.' });
+      setStatus({ type: 'error', message: err.response?.data?.message || 'Failed to send message. Please try again.' });
     } finally {
       setLoading(false); // Stop loading
     }
@@ -32,7 +36,8 @@ const SendMessage = ({ applicantId, sendNotification }) => {
         onChange={(e) => setMessage(e.target.value)}
         placeholder="Write your message here..."
         rows="4"
-        className="border border-gray-300 rounded-md p-2 w-full resize-none focus:ring-2 focus:ring-blue-500"
+        className="border border-gray-300 rounded-md p-2 w-full sm:w-2/3 resize-none focus:ring-2 focus:ring-blue-500"
+        disabled={loading}
       ></textarea>
 
       <button
@@ -54,7 +59,11 @@ const SendMessage = ({ applicantId, sendNotification }) => {
       </button>
 
       {status.message && (
-        <div className={`mt-2 text-sm ${status.type === 'success' ? 'text-green-500' : 'text-red-500'}`}>
+        <div
+          className={`mt-2 text-sm ${status.type === 'success' ? 'text-green-500' : 'text-red-500'}`}
+          role="status"
+          aria-live="assertive"
+        >
           {status.message}
         </div>
       )}
