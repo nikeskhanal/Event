@@ -39,13 +39,13 @@ const MyCreatedHackathon = () => {
       <div className="flex justify-center space-x-4 mb-6">
         <button
           className="px-6 py-2 bg-gray-700 text-white rounded-lg shadow-md hover:bg-gray-800 transition"
-          onClick={() => navigate("/:id/recruiter-home")}
+          onClick={() => navigate("/recruiter-home")}
         >
            Home
         </button>
         <button
           className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition"
-          onClick={() => navigate("/:id/recruiter-home/my-posted-jobs")}
+          onClick={() => navigate("/my-posted-jobs")}
         >
           My Jobs
         </button>

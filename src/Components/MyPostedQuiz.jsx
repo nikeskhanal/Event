@@ -60,8 +60,8 @@ const MyPostedQuiz = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-300 to-blue-500 p-6">
       {/* Navigation */}
       <div className="flex justify-center space-x-4 mb-6">
-        <button className="px-6 py-2 bg-gray-700 text-white rounded-lg shadow-md hover:bg-gray-800 transition" onClick={() => navigate("/:id/recruiter-home")}>Home</button>
-        <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition" onClick={() => navigate("/:id/recruiter-home/my-posted-jobs")}>My Jobs</button>
+        <button className="px-6 py-2 bg-gray-700 text-white rounded-lg shadow-md hover:bg-gray-800 transition" onClick={() => navigate("/recruiter-home")}>Home</button>
+        <button className="px-6 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition" onClick={() => navigate("/my-posted-jobs")}>My Jobs</button>
         <button className="px-6 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition" onClick={() => navigate("/my-quizzes")}>My Quizzes</button>
         <button className="px-6 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 transition" onClick={() => navigate("/my-hackathons")}>My Hackathons</button>
       </div>

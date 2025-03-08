@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const FetchProfile = () => {
+  const { userId } = useParams(); // Get user ID from URL
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -9,21 +12,26 @@ const FetchProfile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get('/api/profile', {
+        const endpoint = userId ? `/api/profile/${userId}` : "/api/profile"; // Dynamically fetch correct profile
+        console.log("Fetching profile from:", endpoint); // Debugging line
+        const response = await axios.get(endpoint, {
           headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}` // Assuming token is stored in localStorage
-          }
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
+
+        console.log("API Response:", response.data); // Debugging line
         setUser(response.data.user);
       } catch (err) {
-        setError('Failed to fetch profile');
+        console.error("Error fetching profile:", err);
+        setError("Failed to fetch profile");
       } finally {
         setLoading(false);
       }
     };
 
     fetchProfile();
-  }, []);
+  }, [userId]);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -37,7 +45,6 @@ const FetchProfile = () => {
           <p>Bio: {user.bio}</p>
           <p>Location: {user.location}</p>
           <p>Education: {user.education}</p>
-          {/* Display more profile data here */}
         </div>
       )}
     </div>

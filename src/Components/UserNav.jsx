@@ -39,7 +39,7 @@ const UserNav = () => {
                 <ul className="flex space-x-6 items-center">
                     <li>
                         <NavLink
-                            to="/id:/user-home"
+                            to="/user-home"
                             className={({ isActive }) => `flex items-center gap-2 ${isActive ? 'text-blue-400' : 'hover:text-gray-300'}`}
                         >
                             <Home size={20} /> Home
@@ -47,7 +47,7 @@ const UserNav = () => {
                     </li>
                     <li>
                         <NavLink
-                            to="/userprofile/:id"
+                            to="/userprofile"
                             className={({ isActive }) => `flex items-center gap-2 ${isActive ? 'text-blue-400' : 'hover:text-gray-300'}`}
                         >
                             <User size={20} /> Profile

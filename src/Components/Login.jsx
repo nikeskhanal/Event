@@ -26,9 +26,9 @@ const Login = () => {
         localStorage.setItem('token', data.token); 
 
         if (data.user.role === 'recruiter') {
-          navigate(`/${data.user.id}/recruiter-home`); 
+          navigate(`/recruiter-home`); 
         } else if (data.user.role === 'user') {
-          navigate(`/${data.user.id}/user-home`); 
+          navigate(`/user-home`); 
         }
       } else {
         setMessage(data.message); 

@@ -28,17 +28,22 @@ const App = () => {
         <Router>
             <Routes>
                 <Route path="/" element={<Login />} />
-                <Route path="/:id/recruiter-home" element={<RecruiterHome />} />
-                <Route path="/:id/user-home" element={<UserHome />} />
+                <Route path="/recruiter-home" element={<RecruiterHome />} />
+                <Route path="/user-home" element={<UserHome />} />
                 <Route path="/signup" element={<Signup />} />
                 
                 {/* Profile route should be dynamic */}
                 <Route path="/profile" element={<Profile />} />
 
                 
+
+
+
+
+
                 <Route path="/profilees" element={<FetchProfile />} />
                 <Route path="/usernav" element={<UserNav />} />
-                <Route path="/userprofile/:id" element={<UserPorfile />} />
+                <Route path="/userprofile" element={<UserPorfile />} />
                 <Route path="/userNoti" element={<UserNoti />} />
                 <Route path="/play-quiz" element={<QuizPlay />} />
                 <Route path="/joblist" element={<JobList />} />
@@ -56,9 +61,12 @@ const App = () => {
                 <Route path="/create-hackathon" element={<CreateHackathon />} />
                 <Route path="/hackathon/:hackathonId/participants" element={<HackathonParticipantList />} />
 
-                {/* Updated routes */}
-                <Route path="/:id/recruiter-home/my-posted-jobs" element={<MyPostedJobs />} />
+            
+                <Route path="/my-posted-jobs" element={<MyPostedJobs />} />
                 <Route path="/job/:jobId/applicants" element={<ApplicantsList />} />
+
+                
+        <Route path="/userprofile" element={<FetchProfile />} />
             </Routes>
         </Router>
     );

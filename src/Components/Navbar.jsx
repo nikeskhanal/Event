@@ -20,7 +20,7 @@ const Navbar = () => {
                 <ul className="flex space-x-6 items-center">
                     <li>
                         <NavLink
-                            to="/:id/recruiter-home"
+                            to="/recruiter-home"
                             className={({ isActive }) =>
                                 `flex items-center space-x-2 ${
                                     isActive ? 'text-blue-600 font-semibold' : 'text-white hover:text-blue-500'
