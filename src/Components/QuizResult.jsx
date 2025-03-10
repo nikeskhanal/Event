@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react"; 
+import { useParams, useNavigate } from "react-router-dom";
 import { Award, UserCheck, Medal } from 'lucide-react'; // Importing icons from lucide-react
 import Navbar from "./Navbar";
 
 const QuizResult = () => {
   const { quizId } = useParams();
+  const navigate = useNavigate(); // Initialize useNavigate hook
   const [results, setResults] = useState([]);
 
   useEffect(() => {
@@ -27,59 +28,72 @@ const QuizResult = () => {
   // Sort results by score in descending order
   const sortedResults = [...results].sort((a, b) => b.score - a.score);
 
+  const handleViewProfile = (participantId) => {
+    navigate(`/profile/${participantId}`); // Navigate to the profile page
+  };
+
   return (
     <div>
-      <Navbar/>
-    <div className="container mx-auto p-6 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg shadow-lg">
-      <h2 className="text-3xl font-bold text-center text-white mb-8">Quiz Results</h2>
-      {results.length > 0 ? (
-        <div className="space-y-6">
-          {sortedResults.map((participant, index) => {
-            // Determine the background color, ranking, and icons
-            let bgColor = "";
-            let rank = "";
-            let Icon = null;
-            switch (index) {
-              case 0:
-                bgColor = "bg-yellow-400"; // Gold
-                rank = "1st";
-                Icon = <Award className="text-yellow-600" size={24} />;
-                break;
-              case 1:
-                bgColor = "bg-gray-300"; // Silver
-                rank = "2nd";
-                Icon = <Medal className="text-gray-600" size={24} />;
-                break;
-              case 2:
-                bgColor = "bg-amber-600"; // Bronze
-                rank = "3rd";
-                Icon = <Medal className="text-amber-400" size={24} />;
-                break;
-              default:
-                bgColor = "bg-white";
-                rank = `${index + 1}th`;
-                Icon = <UserCheck className="text-gray-500" size={24} />;
-                break;
-            }
+      <Navbar />
+      <div className="container mx-auto p-8 bg-gray-50 rounded-lg shadow-lg">
+        <h2 className="text-4xl font-semibold text-center text-black mb-10">Quiz Results</h2>
+        {results.length > 0 ? (
+          <div className="space-y-6">
+            {sortedResults.map((participant, index) => {
+              // Determine the background color, ranking, and icons
+              let bgColor = "";
+              let rank = "";
+              let Icon = null;
+              switch (index) {
+                case 0:
+                  bgColor = "bg-gradient-to-r from-yellow-400 to-yellow-500"; // Gold
+                  rank = "1st";
+                  Icon = <Award className="text-white" size={24} />;
+                  break;
+                case 1:
+                  bgColor = "bg-gradient-to-r from-gray-300 to-gray-400"; // Silver
+                  rank = "2nd";
+                  Icon = <Medal className="text-white" size={24} />;
+                  break;
+                case 2:
+                  bgColor = "bg-gradient-to-r from-amber-500 to-amber-600"; // Bronze
+                  rank = "3rd";
+                  Icon = <Medal className="text-white" size={24} />;
+                  break;
+                default:
+                  bgColor = "bg-white"; // Default for others
+                  rank = `${index + 1}th`;
+                  Icon = <UserCheck className="text-gray-600" size={24} />;
+                  break;
+              }
 
-            return (
-              <div
-                key={index}
-                className={`flex items-center justify-between p-5 rounded-lg shadow-lg ${bgColor} text-white`}
-              >
-                <div className="flex items-center space-x-4">
-                  {Icon}
-                  <p className="text-lg font-semibold">{rank} - {participant.user.name}</p>
+              return (
+                <div
+                  key={index}
+                  className={`flex flex-col md:flex-row items-center justify-between p-5 rounded-lg shadow-md hover:shadow-lg transition-all ease-in-out duration-300 ${bgColor} text-black`}
+                >
+                  <div className="flex items-center space-x-6 mb-4 md:mb-0">
+                    {Icon}
+                    <div className="space-y-2">
+                      <p className="text-xl font-medium text-black">{rank} - {participant.user.name}</p>
+                      <p className="text-md text-gray-700">{participant.user.email}</p>
+                      <button
+                        onClick={() => handleViewProfile(participant.user._id)} // View Profile button
+                        className="text-black hover:text-gray-800 transition-colors duration-200 text-sm"
+                      >
+                        View Profile
+                      </button>
+                    </div>
+                  </div>
+                  <div className="text-3xl font-semibold mt-4 md:mt-0 text-black">{participant.score}</div>
                 </div>
-                <p className="text-2xl font-bold">{participant.score}</p>
-              </div>
-            );
-          })}
-        </div>
-      ) : (
-        <p className="text-center text-white opacity-70">No results available.</p>
-      )}
-    </div>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="text-center text-black">No results available.</p>
+        )}
+      </div>
     </div>
   );
 };

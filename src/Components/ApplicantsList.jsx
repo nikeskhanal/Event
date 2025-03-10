@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { User, Mail, Eye } from 'lucide-react';
+import { User, Mail } from 'lucide-react';
 import SendMessage from './SendMessage';
 
 const ApplicantsList = () => {
@@ -83,14 +83,12 @@ const ApplicantsList = () => {
                   Applied at: {new Date(application.appliedAt).toLocaleString()}
                 </div>
               </div>
-              {/* View Profile - Navigates to Profile Page */}
               <button
-      onClick={() => navigate(`/userprofile/${application.user._id}`)}
-      className="flex items-center bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
-    >
-      View Profile
-    </button>
-
+                onClick={() => navigate(`/profile/${application.user._id}`)}
+                className="flex items-center bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200"
+              >
+                View Profile
+              </button>
             </div>
             <div className="flex items-center space-x-4 mt-4">
               <SendMessage

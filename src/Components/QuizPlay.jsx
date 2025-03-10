@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -62,7 +62,6 @@ const QuizPlay = () => {
         }
       );
   
-      // Handle case when the server responds with the error that the quiz has already been submitted
       if (response.data.error && response.data.error === 'You have already submitted the quiz') {
         setErrorMessage("You have already submitted the quiz.");
         return;
@@ -77,8 +76,6 @@ const QuizPlay = () => {
       setErrorMessage("Failed to submit quiz. Please try again.");
     }
   };
-  
-  
 
   const fetchQuizResults = async () => {
     try {
@@ -92,6 +89,11 @@ const QuizPlay = () => {
     } catch (error) {
       console.error("Error fetching quiz results:", error);
     }
+  };
+
+  // Handle redirect to QuizResult page
+  const handleViewLeaderboard = () => {
+    navigate(`/quiz-result/${selectedQuiz._id}`); // Redirect to QuizResult with quizId
   };
 
   return (
@@ -159,15 +161,7 @@ const QuizPlay = () => {
             <p className="mt-4 text-lg font-bold">Your Score: {score} / {selectedQuiz.questions?.length || 0}</p>
           )}
 
-          {selectedQuiz.creator?.name && (
-            <button
-              className="mt-4 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg"
-              onClick={fetchQuizResults}
-            >
-              View Results
-            </button>
-          )}
-
+         
           {quizResults.length > 0 && (
             <div className="mt-6">
               <h4 className="text-lg font-semibold mb-4">Results</h4>

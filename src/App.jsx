@@ -66,7 +66,8 @@ const App = () => {
                 <Route path="/job/:jobId/applicants" element={<ApplicantsList />} />
 
                 
-        <Route path="/userprofile" element={<FetchProfile />} />
+                <Route path="/profile/:id" element={<FetchProfile />} />
+
             </Routes>
         </Router>
     );
