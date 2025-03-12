@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeftCircle, CheckCircle } from 'lucide-react'; // Import icons
 
 const JobList = () => {
   const [jobs, setJobs] = useState([]);
@@ -7,40 +9,66 @@ const JobList = () => {
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(true);
   const [appliedJobs, setAppliedJobs] = useState([]);
+  const navigate = useNavigate();
 
-  
   useEffect(() => {
-  const fetchJobs = async () => {
-  try {
-    const response = await axios.get('http://localhost:4000/api/jobs');
-    if (response.data.jobs) {
-      setJobs(response.data.jobs);
-    } else {
-      setError('No jobs available.');
-    }
-    setLoading(false);
-  } catch (err) {
-    
-    if (!err.response) {
-      setError('Network Error. Please check your connection.');
-    } else {
-      setError('Failed to load jobs. Please try again later.');
-    }
-    setLoading(false);
-  }
-};
+    const fetchJobs = async () => {
+      try {
+        const response = await axios.get('http://localhost:4000/api/jobs');
+        if (response.data.jobs) {
+          setJobs(response.data.jobs);
+        } else {
+          setError('No jobs available.');
+        }
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to load jobs. Please try again later.');
+        setLoading(false);
+      }
+    };
 
-    
+    const fetchAppliedJobs = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        const response = await axios.get('http://localhost:4000/api/jobs/applied', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        setAppliedJobs(response.data.appliedJobs.map(job => job._id));
+      } catch (err) {
+        console.error('Error fetching applied jobs:', err);
+      }
+    };
+
     fetchJobs();
+    fetchAppliedJobs();
   }, []);
 
-  // Handle job application
+  useEffect(() => {
+    if (error) {
+      alert(error);
+      setError('');
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (success) {
+      alert(success);
+      setSuccess('');
+    }
+  }, [success]);
+
+  if (loading) {
+    return <div className="text-center text-gray-500">Loading jobs...</div>;
+  }
+
   const handleApply = async (jobId) => {
     try {
       setError('');
       setSuccess('');
 
-      // Check if token exists in localStorage
       const token = localStorage.getItem('token');
       if (!token) {
         setError('You must be logged in to apply for jobs.');
@@ -57,48 +85,71 @@ const JobList = () => {
           },
         }
       );
-      
-      setSuccess(response.data.message);
-      setAppliedJobs((prev) => [...prev, jobId]); 
+
+      if (response.data && response.data.message) {
+        setSuccess(response.data.message);
+        setAppliedJobs((prev) => [...prev, jobId]);
+      } else {
+        setError('An unexpected error occurred. Please try again later.');
+      }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to apply for the job. Please try again later.');
+      if (err.response && err.response.data) {
+        setError(err.response.data.error || err.response.data.message || 'Failed to apply for the job. Please try again later.');
+      } else {
+        setError('Failed to apply for the job. Please try again later.');
+      }
     }
   };
 
-  // Show loading state
-  if (loading) {
-    return <div className="text-center text-gray-500">Loading jobs...</div>;
-  }
-
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Available Jobs</h2>
-      
-      {/* Error and Success Messages */}
-      {error && <div className="text-red-500 mb-4">{error}</div>}
-      {success && <div className="text-green-500 mb-4">{success}</div>}
-      
-      {/* Display Job List */}
-      <div className="grid grid-cols-1 gap-6">
-        {jobs.map((job) => (
-          <div key={job._id} className="border p-4 rounded shadow-sm hover:shadow-md transition-shadow">
-            <h3 className="text-xl font-semibold">{job.title}</h3>
-            <p className="text-gray-700">{job.description}</p>
-            <p className="mt-2">
-              <strong>Company:</strong> {job.company}
-            </p>
-            <p>
-              <strong>Location:</strong> {job.location}
-            </p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-400 to-indigo-600 flex flex-col">
+      <div className="flex flex-col items-center justify-center flex-grow px-6 py-8">
+        <h1 className="text-4xl font-extrabold text-white mb-8 drop-shadow-lg">
+          Available Jobs
+        </h1>
+
+        {/* Glassmorphism Card */}
+        <div className="bg-white/20 backdrop-blur-md p-8 rounded-2xl shadow-xl w-full max-w-4xl text-center">
+          <div className="flex flex-col gap-6">
             <button
-              onClick={() => handleApply(job._id)}
-              className={`mt-4 px-4 py-2 text-white rounded ${appliedJobs.includes(job._id) ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
-              disabled={appliedJobs.includes(job._id)}
+              onClick={() => navigate(-1)}
+              className="flex items-center justify-center gap-3 px-6 py-3 text-lg font-medium text-white bg-gray-500 rounded-lg hover:bg-gray-600 transition transform hover:scale-105 shadow-md"
             >
-              {appliedJobs.includes(job._id) ? 'Applied' : 'Apply'}
+              <ArrowLeftCircle className="w-5 h-5" />
+              Back
             </button>
+            {/* Display Job List */}
+            <div className="grid grid-cols-1 gap-8 mt-6">
+              {jobs.map((job) => (
+                <div key={job._id} className="bg-white/20 backdrop-blur-md p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow">
+                  <h3 className="text-xl font-semibold text-white">{job.title}</h3>
+                  <p className="text-gray-200 mt-2">{job.description}</p>
+                  <p className="text-gray-200 mt-2">
+                    <strong>Company:</strong> {job.company}
+                  </p>
+                  <p className="text-gray-200">
+                    <strong>Location:</strong> {job.location}
+                  </p>
+                  <p className="text-gray-200">
+                    <strong>Salary:</strong> {job.salary ? `$${job.salary}` : 'Not disclosed'}
+                  </p>
+                  <button
+                    onClick={() => handleApply(job._id)}
+                    className={`mt-4 flex items-center justify-center px-6 py-2 rounded-lg text-white ${appliedJobs.includes(job._id) ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
+                    disabled={appliedJobs.includes(job._id)}
+                  >
+                    {appliedJobs.includes(job._id) ? (
+                      <CheckCircle className="w-5 h-5 mr-2" />
+                    ) : (
+                      <span>Apply</span>
+                    )}
+                    {appliedJobs.includes(job._id) && <span>Applied</span>}
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
