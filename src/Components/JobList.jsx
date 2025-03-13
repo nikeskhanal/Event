@@ -102,53 +102,56 @@ const JobList = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-400 to-indigo-600 flex flex-col">
-      <div className="flex flex-col items-center justify-center flex-grow px-6 py-8">
-        <h1 className="text-4xl font-extrabold text-white mb-8 drop-shadow-lg">
-          Available Jobs
-        </h1>
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-indigo-700 flex flex-col items-center px-6 py-10">
+      <h1 className="text-4xl font-extrabold text-white drop-shadow-lg mb-8">
+        Available Jobs
+      </h1>
 
-        {/* Glassmorphism Card */}
-        <div className="bg-white/20 backdrop-blur-md p-8 rounded-2xl shadow-xl w-full max-w-4xl text-center">
-          <div className="flex flex-col gap-6">
-            <button
-              onClick={() => navigate(-1)}
-              className="flex items-center justify-center gap-3 px-6 py-3 text-lg font-medium text-white bg-gray-500 rounded-lg hover:bg-gray-600 transition transform hover:scale-105 shadow-md"
-            >
-              <ArrowLeftCircle className="w-5 h-5" />
-              Back
-            </button>
-            {/* Display Job List */}
-            <div className="grid grid-cols-1 gap-8 mt-6">
-              {jobs.map((job) => (
-                <div key={job._id} className="bg-white/20 backdrop-blur-md p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow">
-                  <h3 className="text-xl font-semibold text-white">{job.title}</h3>
-                  <p className="text-gray-200 mt-2">{job.description}</p>
-                  <p className="text-gray-200 mt-2">
-                    <strong>Company:</strong> {job.company}
-                  </p>
-                  <p className="text-gray-200">
-                    <strong>Location:</strong> {job.location}
-                  </p>
-                  <p className="text-gray-200">
-                    <strong>Salary:</strong> {job.salary ? `$${job.salary}` : 'Not disclosed'}
-                  </p>
-                  <button
-                    onClick={() => handleApply(job._id)}
-                    className={`mt-4 flex items-center justify-center px-6 py-2 rounded-lg text-white ${appliedJobs.includes(job._id) ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
-                    disabled={appliedJobs.includes(job._id)}
-                  >
-                    {appliedJobs.includes(job._id) ? (
-                      <CheckCircle className="w-5 h-5 mr-2" />
-                    ) : (
-                      <span>Apply</span>
-                    )}
-                    {appliedJobs.includes(job._id) && <span>Applied</span>}
-                  </button>
-                </div>
-              ))}
+      {/* Glassmorphism Container */}
+      <div className="bg-white/30 backdrop-blur-lg p-8 rounded-2xl shadow-xl w-full max-w-3xl text-center">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center justify-center gap-3 px-6 py-3 text-lg font-medium text-white bg-gray-600 rounded-lg hover:bg-gray-700 transition transform hover:scale-105 shadow-md mb-6"
+        >
+          <ArrowLeftCircle className="w-5 h-5" />
+          Back
+        </button>
+
+        {/* Job Listings */}
+        <div className="space-y-6">
+          {jobs.map((job) => (
+            <div key={job._id} className="bg-white/40 backdrop-blur-md p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow">
+              <h3 className="text-2xl font-semibold text-black drop-shadow-sm">{job.title}</h3>
+              <p className="text-gray-800 mt-2 text-lg">{job.description}</p>
+              <p className="text-gray-900 mt-1 font-medium">
+                <strong>Company:</strong> {job.company}
+              </p>
+              <p className="text-gray-900">
+                <strong>Location:</strong> {job.location}
+              </p>
+              <p className="text-gray-900">
+                <strong>Salary:</strong> {job.salary ? `$${job.salary}` : 'Not disclosed'}
+              </p>
+              <button
+                onClick={() => handleApply(job._id)}
+                className={`mt-4 flex items-center justify-center px-6 py-2 rounded-lg text-white text-lg font-semibold ${
+                  appliedJobs.includes(job._id)
+                    ? 'bg-gray-500 cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700'
+                }`}
+                disabled={appliedJobs.includes(job._id)}
+              >
+                {appliedJobs.includes(job._id) ? (
+                  <>
+                    <CheckCircle className="w-5 h-5 mr-2" />
+                    Applied
+                  </>
+                ) : (
+                  'Apply'
+                )}
+              </button>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

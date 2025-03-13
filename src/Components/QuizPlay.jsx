@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'; 
+import React, { useEffect, useState } from 'react';  
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ArrowLeftCircle, CheckCircle } from 'lucide-react';
 
 const QuizPlay = () => {
   const [quizzes, setQuizzes] = useState([]);
@@ -37,22 +38,22 @@ const QuizPlay = () => {
 
   const handleSubmitQuiz = async () => {
     if (!selectedQuiz || hasSubmitted) return;
-  
+
     if (Object.keys(userAnswers).length !== selectedQuiz.questions.length) {
       setErrorMessage("Please answer all questions before submitting.");
       alert("Please answer all questions before submitting.");
       return;
     }
-  
+
     try {
       const token = localStorage.getItem("token");
       const name = localStorage.getItem("name");
-  
+
       const formattedAnswers = Object.keys(userAnswers).map((questionId) => ({
         questionId,
         selectedOption: userAnswers[questionId],
       }));
-  
+
       const response = await axios.post(
         "http://localhost:4000/api/quiz/submit",
         {
@@ -64,19 +65,19 @@ const QuizPlay = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-  
+
       if (response.data.error && response.data.error === 'You have already played this quiz') {
         setErrorMessage("You have already played this quiz.");
         alert("You have already played this quiz.");
         return;
       }
-  
+
       setScore(response.data.score);
       setHasSubmitted(true);
       setErrorMessage(null);
     } catch (error) {
       console.error("Error submitting quiz:", error.response || error);
-  
+
       if (error.response && error.response.data.error === "You have already played this quiz") {
         setErrorMessage("You have already played this quiz.");
         alert("You have already played this quiz.");
@@ -87,116 +88,84 @@ const QuizPlay = () => {
     }
   };
 
-  const fetchQuizResults = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:4000/api/quiz/results/${selectedQuiz._id}`,
-        {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      );
-      setQuizResults(response.data.results);
-    } catch (error) {
-      setErrorMessage("Error fetching quiz results");
-      alert("Error fetching quiz results");
-      console.error("Error fetching quiz results:", error);
-    }
-  };
-
-  const handleViewLeaderboard = () => {
-    navigate(`/quiz-result/${selectedQuiz._id}`);
-  };
-
-  // Back button click handler
   const handleBack = () => {
-    navigate('/user-home');  // Redirect to the user home page
+    navigate('/user-home');
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Available Quizzes</h2>
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-indigo-700 flex flex-col items-center px-6 py-10">
+      <h2 className="text-4xl font-extrabold text-white drop-shadow-lg mb-8">
+        Available Quizzes
+      </h2>
 
-      {/* Back Button */}
       <button
-        onClick={handleBack}
-        className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 mb-4"
-      >
-        Back to Home
-      </button>
+          onClick={() => navigate('/user-home')}
+          className="flex items-center justify-center gap-3 px-6 py-3 text-lg font-medium text-white bg-gray-600 rounded-lg hover:bg-gray-700 transition transform hover:scale-105 shadow-md mb-6"
+        >
+          <ArrowLeftCircle className="w-5 h-5" />
+          Back 
+        </button>
 
       {!selectedQuiz ? (
-        <ul className="space-y-2">
-          {quizzes?.length > 0 ? (
+        <div className="space-y-4 w-full max-w-3xl">
+          {quizzes.length > 0 ? (
             quizzes.map((quiz) => (
-              <li key={quiz._id} className="p-4 bg-gray-100 rounded-lg flex justify-between items-center">
-                <div>
-                  <span className="text-lg font-semibold">{quiz.title}</span>
-                  <p className="text-sm text-gray-500">Created by: {quiz.creator?.name || 'Unknown'}</p>
-                </div>
+              <div key={quiz._id} className="p-6 bg-white/40 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-2xl transition-shadow">
+                <h3 className="text-2xl font-semibold text-black">{quiz.title}</h3>
+                <p className="text-gray-800 mt-2 text-lg">Created by: {quiz.creator?.name || 'Unknown'}</p>
                 <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                  className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
                   onClick={() => handleJoinQuiz(quiz)}
                 >
                   Join
                 </button>
-              </li>
+              </div>
             ))
           ) : (
-            <p className="text-gray-600">No quizzes available.</p>
+            <p className="text-gray-200">No quizzes available.</p>
           )}
-        </ul>
+        </div>
       ) : (
-        <div className="mt-6 p-4 bg-white rounded-lg shadow-md">
-          <h3 className="text-xl font-semibold mb-4">{selectedQuiz.title}</h3>
-          <p className="text-sm text-gray-500 mb-4">Created by: {selectedQuiz.creator?.name || 'Unknown'}</p>
+        <div className="mt-6 bg-white/40 backdrop-blur-md p-6 rounded-2xl shadow-lg w-full max-w-3xl">
+          <h3 className="text-2xl font-semibold text-black">{selectedQuiz.title}</h3>
+          <p className="text-gray-800 mt-2 text-lg">Created by: {selectedQuiz.creator?.name || 'Unknown'}</p>
 
           {errorMessage && (
-            <p className="text-red-500 bg-red-100 p-2 rounded mb-4">{errorMessage}</p>
+            <p className="text-red-500 bg-red-100 p-2 rounded mt-4">{errorMessage}</p>
           )}
 
-          {selectedQuiz.questions?.map((question) => (
+          {selectedQuiz.questions.map((question) => (
             <div key={question._id} className="mb-4">
-              <p className="font-medium">{question.questionText}</p>
-              {question.options?.map((option) => (
-                <label key={option._id} className="block cursor-pointer">
-                  <input
-                    type="radio"
-                    name={question._id}
-                    value={option._id}
-                    checked={userAnswers[question._id] === option._id}
-                    onChange={() => handleAnswerSelect(question._id, option._id)}
-                    className="mr-2"
-                  />
-                  {option.optionText}
-                </label>
-              ))}
+              <p className="font-medium text-gray-900 text-left">{question.questionText}</p>
+              <div className="flex flex-col items-start mt-2">
+                {question.options.map((option) => (
+                  <label key={option._id} className="cursor-pointer text-gray-800 text-left mb-2">
+                    <input
+                      type="radio"
+                      name={question._id}
+                      value={option._id}
+                      checked={userAnswers[question._id] === option._id}
+                      onChange={() => handleAnswerSelect(question._id, option._id)}
+                      className="mr-2"
+                    />
+                    {option.optionText}
+                  </label>
+                ))}
+              </div>
             </div>
           ))}
 
           <button
-            className={`px-4 py-2 rounded-lg mt-4 transition ${hasSubmitted ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 hover:bg-green-600 text-white"}`}
+            className={`px-6 py-2 rounded-lg mt-4 transition text-white text-lg font-semibold ${
+              hasSubmitted ? "bg-gray-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"
+            }`}
             onClick={handleSubmitQuiz}
             disabled={hasSubmitted}
           >
             {hasSubmitted ? "Submitted" : "Submit"}
           </button>
 
-          {score !== null && (
-            <p className="mt-4 text-lg font-bold">Your Score: {score} / {selectedQuiz.questions?.length || 0}</p>
-          )}
-
-          {quizResults.length > 0 && (
-            <div className="mt-6">
-              <h4 className="text-lg font-semibold mb-4">Results</h4>
-              <ul>
-                {quizResults.map((result) => (
-                  <li key={result._id} className="mb-2">
-                    <p>{result.userName}: {result.score} / {selectedQuiz.questions.length}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+          {score !== null && <p className="mt-4 text-lg font-bold text-gray-900">Your Score: {score} / {selectedQuiz.questions.length}</p>}
         </div>
       )}
     </div>

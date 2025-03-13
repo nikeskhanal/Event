@@ -16,7 +16,7 @@ import JobList from './Components/JobList';
 import ApplicantsList from './Components/ApplicantsList';
 import MyPostedJobs from './Components/MyPostedJobs';
 import SendMessage from './Components/SendMessage';
-import QuizResult from './Components/Quizresult';
+import QuizResult from './Components/QuizResult';
 import MyPostedQuiz from './Components/MyPostedQuiz';
 import CreateHackathon from './Components/CreateHackathon';
 import MyCreatedHackathon from './Components/MyCreatedHackathon';
