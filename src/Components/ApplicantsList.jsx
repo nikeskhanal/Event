@@ -38,6 +38,12 @@ const ApplicantsList = () => {
     fetchApplications();
   }, [jobId]);
 
+  const clearNotificationStatus = (userId) => {
+    setTimeout(() => {
+      setNotificationStatus((prev) => ({ ...prev, [userId]: '' }));
+    }, 5000); // Clear after 5 seconds
+  };
+
   const sendNotification = async (userId, message) => {
     try {
       await axios.post(
@@ -50,9 +56,11 @@ const ApplicantsList = () => {
         }
       );
       setNotificationStatus((prev) => ({ ...prev, [userId]: 'Sent' }));
+      clearNotificationStatus(userId); // Clear status after some time
     } catch (error) {
       console.error('Failed to send notification:', error.response?.data || error.message);
-      setNotificationStatus((prev) => ({ ...prev, [userId]: 'Failed' }));
+      setNotificationStatus((prev) => ({ ...prev, [userId]: `Failed: ${error.response?.data?.message || 'Unknown error'}` }));
+      clearNotificationStatus(userId);
     }
   };
 
@@ -97,7 +105,7 @@ const ApplicantsList = () => {
               />
               {notificationStatus[application.user._id] && (
                 <div className={`text-sm ${notificationStatus[application.user._id] === 'Sent' ? 'text-green-500' : 'text-red-500'}`}>
-                  {notificationStatus[application.user._id] === 'Sent' ? 'Notification Sent!' : 'Failed to send notification'}
+                  {notificationStatus[application.user._id] === 'Sent' ? 'Notification Sent!' : notificationStatus[application.user._id]}
                 </div>
               )}
             </div>
