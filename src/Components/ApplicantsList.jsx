@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { User, Mail } from 'lucide-react';
-import SendMessage from './SendMessage';
+
 
 const ApplicantsList = () => {
   const { jobId } = useParams();
@@ -98,17 +98,7 @@ const ApplicantsList = () => {
                 View Profile
               </button>
             </div>
-            <div className="flex items-center space-x-4 mt-4">
-              <SendMessage
-                applicantId={application.user._id}
-                sendNotification={sendNotification}
-              />
-              {notificationStatus[application.user._id] && (
-                <div className={`text-sm ${notificationStatus[application.user._id] === 'Sent' ? 'text-green-500' : 'text-red-500'}`}>
-                  {notificationStatus[application.user._id] === 'Sent' ? 'Notification Sent!' : notificationStatus[application.user._id]}
-                </div>
-              )}
-            </div>
+           
           </li>
         ))}
       </ul>

@@ -15,7 +15,7 @@ import QuizPlay from './Components/QuizPlay';
 import JobList from './Components/JobList';
 import ApplicantsList from './Components/ApplicantsList';
 import MyPostedJobs from './Components/MyPostedJobs';
-import SendMessage from './Components/SendMessage';
+
 import QuizResult from './Components/QuizResult';
 import MyPostedQuiz from './Components/MyPostedQuiz';
 import CreateHackathon from './Components/CreateHackathon';
@@ -51,9 +51,6 @@ const App = () => {
                 <Route path="/hackathons" element={<Hackathons />} />
                 <Route path="/internship" element={<Internship />} />
                 <Route path="/jobform" element={<JobForm />} />
-
-                {/* Send message to a specific user */}
-                <Route path="/sendmessage/:userId" element={<SendMessage />} />
 
                 <Route path="/my-quizzes" element={<MyPostedQuiz />} />
                 <Route path="/my-hackathons" element={<MyCreatedHackathon />} />

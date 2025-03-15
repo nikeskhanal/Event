@@ -1,127 +1,166 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CreateHackathon = () => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [location, setLocation] = useState('');
-  const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState('');  // State for success message
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [location, setLocation] = useState("");
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!title || !description || !startDate || !endDate || !location) {
+      setError("Please fill in all fields");
+      setSuccessMessage("");
+      return;
+    }
+
+    setLoading(true);
     try {
-      const hackathonData = { title, description, startDate, endDate, location };
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:4000/api/hackathons/create",
+        { title, description, startDate, endDate, location },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      const response = await axios.post('http://localhost:4000/api/hackathons/create', hackathonData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+      setSuccessMessage("Hackathon created successfully!");
+      setError("");
+      setTitle("");
+      setDescription("");
+      setStartDate("");
+      setEndDate("");
+      setLocation("");
 
-      setSuccessMessage('Hackathon created successfully!');  // Set success message
-
-      // Reset form fields
-      setTitle('');
-      setDescription('');
-      setStartDate('');
-      setEndDate('');
-      setLocation('');
-
-      // Redirect after 2 seconds
       setTimeout(() => {
-        navigate('/hackathons');
+        navigate("/hackathons");
       }, 2000);
     } catch (error) {
-      setError(error.response?.data?.error || 'Error creating hackathon');
+      setError(error.response?.data?.error || "Error creating hackathon");
+      setSuccessMessage("");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-4 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-semibold text-center mb-6">Create a New Hackathon</h2>
+    <div className="min-h-screen bg-gradient-to-br from-blue-300 to-blue-500 flex items-center justify-center p-6">
+      <div className="w-full max-w-lg bg-white p-8 rounded-2xl shadow-2xl">
+        <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">
+          Create a New Hackathon
+        </h2>
 
-      {/* Success Message */}
-      {successMessage && (
-        <div className="bg-green-500 text-white p-2 rounded mb-4 text-center">
-          {successMessage}
-        </div>
-      )}
-
-      {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Form Fields */}
-        <div className="form-group">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700">Hackathon Title:</label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description:</label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="startDate" className="block text-sm font-medium text-gray-700">Start Date:</label>
-          <input
-            type="date"
-            id="startDate"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="endDate" className="block text-sm font-medium text-gray-700">End Date:</label>
-          <input
-            type="date"
-            id="endDate"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location:</label>
-          <input
-            type="text"
-            id="location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-
+        {/* Back Button */}
         <button
-          type="submit"
-          className="w-full py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          onClick={() => navigate("/recruiter-home")}
+          className="mb-6 flex items-center justify-center gap-3 px-6 py-3 text-lg font-medium text-white bg-gray-600 rounded-lg hover:bg-gray-700 transition transform hover:scale-105 shadow-md"
         >
-          Create Hackathon
+          Back
         </button>
-      </form>
+
+        {/* Success & Error Messages */}
+        {successMessage && (
+          <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-md text-center">
+            {successMessage}
+          </div>
+        )}
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md text-center">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label htmlFor="title" className="block text-gray-700 font-medium">
+              Hackathon Title
+            </label>
+            <input
+              id="title"
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="description" className="block text-gray-700 font-medium">
+              Description
+            </label>
+            <textarea
+              id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="startDate" className="block text-gray-700 font-medium">
+                Start Date
+              </label>
+              <input
+                id="startDate"
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="endDate" className="block text-gray-700 font-medium">
+                End Date
+              </label>
+              <input
+                id="endDate"
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="location" className="block text-gray-700 font-medium">
+              Location
+            </label>
+            <input
+              id="location"
+              type="text"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            />
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              className={`w-full py-3 rounded-lg text-white font-bold transition duration-300 ${
+                loading ? "bg-gray-400 cursor-not-allowed" : "bg-indigo-600 hover:bg-indigo-700"
+              }`}
+              disabled={loading}
+            >
+              {loading ? "Creating..." : "Create Hackathon"}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
