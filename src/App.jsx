@@ -22,6 +22,10 @@ import CreateHackathon from './Components/CreateHackathon';
 import MyCreatedHackathon from './Components/MyCreatedHackathon';
 import HackathonParticipantList from './Components/HackathonParticipantList';
 import FetchProfile from './Components/Fetchprofile';
+import AdminPage from './Components/AdminPage';
+import AdminQuiz from './Components/AdminQuiz';
+import AdminHackathons from './Components/AdminHackathons';
+import AdminJob from './Components/AdminJob';
 
 const App = () => {
     return (
@@ -35,7 +39,10 @@ const App = () => {
                 {/* Profile route should be dynamic */}
                 <Route path="/profile" element={<Profile />} />
 
-                
+                <Route path="/admin" element={<AdminPage />} />
+                <Route path="/admin-quiz" element={<AdminQuiz />} />
+                <Route path="/admin-hackathons" element={<AdminHackathons />} />
+                <Route path="/admin-jobs" element={<AdminJob />} />
 
 
 

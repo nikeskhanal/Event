@@ -71,7 +71,7 @@ const MyPostedQuiz = () => {
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">My Posted Quizzes</h2>
 
         {quizzes.length === 0 ? (
-          <p className="text-center text-gray-500">No quizzes posted yet.</p>
+          <p className="text-center text-gray-500">No quizzes posted .</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {quizzes.map((quiz) => (
