@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import axios from 'axios';
 
 const AdminQuiz = () => {
@@ -7,6 +8,7 @@ const AdminQuiz = () => {
   const [participants, setParticipants] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     fetchQuizzes();
@@ -31,7 +33,7 @@ const AdminQuiz = () => {
     if (!window.confirm('Are you sure you want to delete this quiz?')) return;
     setLoading(true);
     try {
-      await axios.delete(`http://localhost:4000/api/quiz/${quizId}`, {
+      await axios.delete(`http://localhost:4000/api/admin/quiz/${quizId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       setQuizzes(quizzes.filter((quiz) => quiz._id !== quizId));
@@ -61,6 +63,13 @@ const AdminQuiz = () => {
 
   return (
     <div className="container mx-auto p-6">
+      <button
+        onClick={() => navigate('/admin')} // Navigate to /admin
+        className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition mb-4"
+      >
+        Back to Admin
+      </button>
+
       <h2 className="text-3xl font-semibold text-center text-gray-800 mb-6">My Quizzes</h2>
       {loading && <p className="text-center text-gray-500">Loading...</p>}
       {error && <p className="text-center text-red-500">{error}</p>}
