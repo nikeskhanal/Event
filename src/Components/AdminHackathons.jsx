@@ -92,6 +92,6 @@ const AdminHackathons = () => {
       )}
     </div>
   );
-};
+};   
 
 export default AdminHackathons;

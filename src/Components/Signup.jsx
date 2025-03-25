@@ -18,7 +18,7 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch('http://localhost:4000/api/createUser', {
         method: 'POST',
@@ -27,11 +27,12 @@ const Signup = () => {
         },
         body: JSON.stringify(formData),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         setMessage('Signup successful');
+        alert('Signup successful!'); 
       } else {
         setMessage(data.message);
       }
@@ -39,6 +40,7 @@ const Signup = () => {
       setMessage('Network error: Could not connect to the server');
     }
   };
+  
 
   return (
     <div className="h-screen flex flex-col items-center justify-center bg-gray-100" style={{ backgroundImage: 'url("./src/assets/bgg.jpg")', backgroundSize: 'cover', backgroundPosition: 'center' }}>

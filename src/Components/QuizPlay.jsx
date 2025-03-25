@@ -88,8 +88,8 @@ const QuizPlay = () => {
     }
   };
 
-  const handleBack = () => {
-    navigate('/user-home');
+  const handleViewLeaderboard = (quizId) => {
+    navigate(`/user/results/${quizId}`);
   };
 
   return (
@@ -104,7 +104,7 @@ const QuizPlay = () => {
         >
           <ArrowLeftCircle className="w-5 h-5" />
           Back 
-        </button>
+      </button>
 
       {!selectedQuiz ? (
         <div className="space-y-4 w-full max-w-3xl">
@@ -113,12 +113,20 @@ const QuizPlay = () => {
               <div key={quiz._id} className="p-6 bg-white/40 backdrop-blur-md rounded-2xl shadow-lg hover:shadow-2xl transition-shadow">
                 <h3 className="text-2xl font-semibold text-black">{quiz.title}</h3>
                 <p className="text-gray-800 mt-2 text-lg">Created by: {quiz.creator?.name || 'Unknown'}</p>
-                <button
-                  className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
-                  onClick={() => handleJoinQuiz(quiz)}
-                >
-                  Join
-                </button>
+                <div className="flex gap-4 mt-4">
+                  <button
+                    className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+                    onClick={() => handleJoinQuiz(quiz)}
+                  >
+                    Join
+                  </button>
+                  <button
+                    className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
+                    onClick={() => handleViewLeaderboard(quiz._id)}
+                  >
+                    See Leaderboard
+                  </button>
+                </div>
               </div>
             ))
           ) : (
@@ -166,6 +174,15 @@ const QuizPlay = () => {
           </button>
 
           {score !== null && <p className="mt-4 text-lg font-bold text-gray-900">Your Score: {score} / {selectedQuiz.questions.length}</p>}
+
+          {hasSubmitted && (
+            <button
+              className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              onClick={handleViewLeaderboard}
+            >
+              see participants
+            </button>
+          )}
         </div>
       )}
     </div>

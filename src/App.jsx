@@ -5,7 +5,7 @@ import UserHome from './Components/UserHome';
 import Signup from './Components/Signup';
 import Profile from './Components/Profile';
 import UserNav from './Components/UserNav';
-import UserNoti from './Components/UserNoti';
+
 import UserPorfile from './Components/UserPorfile';
 import Quiz from './Components/Quiz';
 import Hackathons from './Components/Hackathons';
@@ -26,6 +26,7 @@ import AdminPage from './Components/AdminPage';
 import AdminQuiz from './Components/AdminQuiz';
 import AdminHackathons from './Components/AdminHackathons';
 import AdminJob from './Components/AdminJob';
+import UserResults from './Components/UserResults';
 
 const App = () => {
     return (
@@ -51,7 +52,7 @@ const App = () => {
                 <Route path="/profilees" element={<FetchProfile />} />
                 <Route path="/usernav" element={<UserNav />} />
                 <Route path="/userprofile" element={<UserPorfile />} />
-                <Route path="/userNoti" element={<UserNoti />} />
+               
                 <Route path="/play-quiz" element={<QuizPlay />} />
                 <Route path="/joblist" element={<JobList />} />
                 <Route path="/quiz" element={<Quiz />} />
@@ -62,6 +63,7 @@ const App = () => {
                 <Route path="/my-quizzes" element={<MyPostedQuiz />} />
                 <Route path="/my-hackathons" element={<MyCreatedHackathon />} />
                 <Route path="/quiz/results/:quizId" element={<QuizResult />} />
+                <Route path="/user/results/:quizId" element={<UserResults />} />
                 <Route path="/create-hackathon" element={<CreateHackathon />} />
                 <Route path="/hackathon/:hackathonId/participants" element={<HackathonParticipantList />} />
 
