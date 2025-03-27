@@ -6,10 +6,10 @@ const Signup = () => {
     name: '',
     email: '',
     password: '',
-    role: 'user', // Default role
+    role: 'user', 
   });
 
-  const [message, setMessage] = useState(''); // For displaying success or error messages
+  const [message, setMessage] = useState(''); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,7 +51,7 @@ const Signup = () => {
         <h3 className="text-2xl font-semibold text-center text-gray-700 mb-6">Sign Up</h3>
         
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name Field */}
+         
           <div>
             <label className="block text-gray-700 font-medium mb-1">Name</label>
             <input
@@ -65,7 +65,7 @@ const Signup = () => {
             />
           </div>
 
-          {/* Email Field */}
+         
           <div>
             <label className="block text-gray-700 font-medium mb-1">Email</label>
             <input
@@ -79,7 +79,7 @@ const Signup = () => {
             />
           </div>
 
-          {/* Password Field */}
+         
           <div>
             <label className="block text-gray-700 font-medium mb-1">Password</label>
             <input
@@ -93,7 +93,7 @@ const Signup = () => {
             />
           </div>
 
-          {/* Role Selection */}
+          
           <div>
             <label className="block text-gray-700 font-medium mb-1">Role</label>
             <select
@@ -107,7 +107,7 @@ const Signup = () => {
             </select>
           </div>
 
-          {/* Submit Button */}
+         
           <div>
             <button
               type="submit"
@@ -118,10 +118,10 @@ const Signup = () => {
           </div>
         </form>
 
-        {/* Display Success or Error Message */}
+       
         {message && <p className="mt-4 text-center text-sm font-medium text-red-600">{message}</p>}
 
-        {/* Link to Login page */}
+      
         <div className="flex justify-center mt-4">
           <p className="text-center text-sm text-gray-600">
             Already Have an Account?{' '}

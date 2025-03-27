@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Navbar from './Navbar';
-import { Edit, User, MapPin, Briefcase, Book, Code, Info } from 'lucide-react';
-import UserNav from './UserNav';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+import { Edit, User, MapPin, Briefcase, Book, Code, Info } from "lucide-react";
+import UserNav from "./UserNav";
 
 const UserProfile = () => {
   const [user, setUser] = useState({
-    name: '',
-    email: '',
-    bio: '',
-    skills: '',
-    location: '',
-    photo: '',
-    education: '',
-    job: '',
+    name: "",
+    email: "",
+    bio: "",
+    skills: "",
+    location: "",
+    photo: "",
+    education: "",
+    job: "",
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -22,9 +22,9 @@ const UserProfile = () => {
   useEffect(() => {
     // Fetch user data when the component mounts
     axios
-      .get('http://localhost:4000/api/profile', {
+      .get("http://localhost:4000/api/profile", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
       .then((response) => {
@@ -32,7 +32,7 @@ const UserProfile = () => {
         setFormData(response.data.user);
       })
       .catch((error) => {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
       });
   }, []);
 
@@ -51,7 +51,7 @@ const UserProfile = () => {
         ...formData,
         photo: file,
       });
-  
+
       // Show preview
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -66,22 +66,22 @@ const UserProfile = () => {
     const userId = user._id;
 
     const data = new FormData();
-    data.append('name', formData.name);
-    data.append('bio', formData.bio);
-    data.append('skills', formData.skills);
-    data.append('location', formData.location);
-    data.append('education', formData.education);
-    data.append('job', formData.job);
+    data.append("name", formData.name);
+    data.append("bio", formData.bio);
+    data.append("skills", formData.skills);
+    data.append("location", formData.location);
+    data.append("education", formData.education);
+    data.append("job", formData.job);
 
     if (formData.photo instanceof File) {
-      data.append('photo', formData.photo);
+      data.append("photo", formData.photo);
     }
 
     axios
       .put(`http://localhost:4000/api/updateUser/${userId}`, data, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
         },
       })
       .then((response) => {
@@ -89,7 +89,7 @@ const UserProfile = () => {
         setIsEditing(false);
       })
       .catch((error) => {
-        console.error('Error updating user data:', error);
+        console.error("Error updating user data:", error);
       });
   };
 
@@ -97,12 +97,18 @@ const UserProfile = () => {
     <div className="bg-blue-600">
       <UserNav />
       <div className="max-w-4xl mx-auto p-8 bg-white bg-opacity-75 rounded-2xl shadow-lg">
-        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-8">User Profile</h2>
+        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-8">
+          User Profile
+        </h2>
         <div className="flex flex-col items-center space-y-6">
           {/* Profile Picture */}
           <div className="relative">
             <img
-              src={user.photo ? `http://localhost:4000/uploads/${user.photo}` : '/default-photo.jpg'}
+              src={
+                user.photo
+                  ? `http://localhost:4000/uploads/${user.photo}`
+                  : "/default-photo.jpg"
+              }
               alt="Profile"
               className="w-36 h-36 rounded-full object-cover border-4 border-indigo-600"
             />
@@ -111,83 +117,99 @@ const UserProfile = () => {
           {isEditing ? (
             <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-md">
               <div>
-                <label className="block text-sm font-medium text-gray-700">Name</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Name
+                </label>
                 <input
                   type="text"
                   name="name"
-                  value={formData.name || ''}
+                  value={formData.name || ""}
                   onChange={handleInputChange}
                   className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Email</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Email
+                </label>
                 <input
                   type="email"
                   name="email"
-                  value={user.email || ''}
+                  value={user.email || ""}
                   disabled
                   className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-gray-100"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Bio</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Bio
+                </label>
                 <textarea
                   name="bio"
-                  value={formData.bio || ''}
+                  value={formData.bio || ""}
                   onChange={handleInputChange}
                   className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Skills</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Skills
+                </label>
                 <input
                   type="text"
                   name="skills"
-                  value={formData.skills || ''}
+                  value={formData.skills || ""}
                   onChange={handleInputChange}
                   className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Location</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Location
+                </label>
                 <input
                   type="text"
                   name="location"
-                  value={formData.location || ''}
+                  value={formData.location || ""}
                   onChange={handleInputChange}
                   className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Education</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Education
+                </label>
                 <input
                   type="text"
                   name="education"
-                  value={formData.education || ''}
-                  onChange={handleInputChange}
-                  className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
-              </div>
-            
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Job</label>
-                <input
-                  type="text"
-                  name="job"
-                  value={formData.job || ''}
+                  value={formData.education || ""}
                   onChange={handleInputChange}
                   className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700">Profile Picture</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Job
+                </label>
+                <input
+                  type="text"
+                  name="job"
+                  value={formData.job || ""}
+                  onChange={handleInputChange}
+                  className="mt-2 block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Profile Picture
+                </label>
                 <input
                   type="file"
                   name="photo"
@@ -208,7 +230,9 @@ const UserProfile = () => {
           ) : (
             <div className="space-y-6 text-gray-700">
               <div className="text-center">
-                <h3 className="text-3xl font-bold text-gray-800">Profile Details</h3>
+                <h3 className="text-3xl font-bold text-gray-800">
+                  Profile Details
+                </h3>
               </div>
 
               <div className="space-y-6">
@@ -235,7 +259,9 @@ const UserProfile = () => {
                   <Briefcase className="text-indigo-600 w-6 h-6" />
                   <div className="flex justify-between w-full">
                     <p className="font-medium">Bio:</p>
-                    <p className="text-gray-600">{user.bio || "No bio available"}</p>
+                    <p className="text-gray-600">
+                      {user.bio || "No bio available"}
+                    </p>
                   </div>
                 </div>
 
@@ -276,7 +302,6 @@ const UserProfile = () => {
                 </div>
               </div>
 
-              {/* Edit Button */}
               <div className="text-center mt-8">
                 <button
                   onClick={() => setIsEditing(true)}

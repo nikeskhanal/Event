@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { User, Trash, Eye } from "lucide-react"; // Import Lucide icons
-import { useNavigate } from "react-router-dom"; // Import useNavigate for React Router v6
+import { User, Trash, Eye } from "lucide-react"; 
+import { useNavigate } from "react-router-dom"; 
 
 const AdminPage = () => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
-  const navigate = useNavigate(); // Initialize the navigate function
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     fetchUsers();
@@ -14,7 +14,7 @@ const AdminPage = () => {
 
   const fetchUsers = async () => {
     try {
-      const token = localStorage.getItem("token"); // Retrieve token from storage
+      const token = localStorage.getItem("token");
       if (!token) {
         console.error("No token found");
         return;
@@ -22,7 +22,7 @@ const AdminPage = () => {
 
       const response = await axios.get("http://localhost:4000/api/getUser", {
         headers: {
-          Authorization: `Bearer ${token}` // Send token in request
+          Authorization: `Bearer ${token}`
         }
       });
 
@@ -34,9 +34,9 @@ const AdminPage = () => {
 
   const handleViewProfile = (user) => {
     if (selectedUser && selectedUser._id === user._id) {
-      setSelectedUser(null); // Close profile if clicked again
+      setSelectedUser(null);
     } else {
-      setSelectedUser(user); // Set profile of the selected user
+      setSelectedUser(user);
     }
   };
 

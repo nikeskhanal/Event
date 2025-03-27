@@ -9,7 +9,7 @@ import UserNav from './Components/UserNav';
 import UserPorfile from './Components/UserPorfile';
 import Quiz from './Components/Quiz';
 import Hackathons from './Components/Hackathons';
-import Internship from './Components/Internship';
+
 import JobForm from './Components/JobForm';
 import QuizPlay from './Components/QuizPlay';
 import JobList from './Components/JobList';
@@ -37,7 +37,7 @@ const App = () => {
                 <Route path="/user-home" element={<UserHome />} />
                 <Route path="/signup" element={<Signup />} />
                 
-                {/* Profile route should be dynamic */}
+               
                 <Route path="/profile" element={<Profile />} />
 
                 <Route path="/admin" element={<AdminPage />} />
@@ -57,7 +57,7 @@ const App = () => {
                 <Route path="/joblist" element={<JobList />} />
                 <Route path="/quiz" element={<Quiz />} />
                 <Route path="/hackathons" element={<Hackathons />} />
-                <Route path="/internship" element={<Internship />} />
+                
                 <Route path="/jobform" element={<JobForm />} />
 
                 <Route path="/my-quizzes" element={<MyPostedQuiz />} />
