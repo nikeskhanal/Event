@@ -34,7 +34,14 @@ const UserNav = () => {
                             <User size={20} /> Profile
                         </NavLink>
                     </li>
-                   
+                    <li>
+                        <NavLink
+                            to="/notifications"
+                            className={({ isActive }) => `flex items-center gap-2 ${isActive ? 'text-blue-400' : 'hover:text-gray-300'}`}
+                        >
+                            <Home size={20} /> Notifications
+                        </NavLink>
+                    </li>
                    
                     <li>
                         <button
