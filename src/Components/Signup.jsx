@@ -119,7 +119,7 @@ const Signup = () => {
         </form>
 
        
-        {message && <p className="mt-4 text-center text-sm font-medium text-red-600">{message}</p>}
+        {message && <p className="mt-4 text-center text-sm font-medium text-green-500">{message}</p>}
 
       
         <div className="flex justify-center mt-4">

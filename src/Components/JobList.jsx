@@ -116,6 +116,13 @@ const JobList = () => {
           <ArrowLeftCircle className="w-5 h-5" />
           Back
         </button>
+        <button
+          onClick={() => navigate("/uploadcv")}
+          className="flex items-center justify-center gap-3 px-6 py-3 text-lg font-medium text-white bg-gray-600 rounded-lg hover:bg-gray-700 transition transform hover:scale-105 shadow-md mb-6"
+        >
+          <ArrowLeftCircle className="w-5 h-5" />
+          uploadcv
+        </button>
 
         {/* Job Listings */}
         <div className="space-y-6">

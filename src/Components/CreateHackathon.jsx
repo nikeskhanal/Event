@@ -44,7 +44,7 @@ const CreateHackathon = () => {
       setLocation("");
 
       setTimeout(() => {
-        navigate("/hackathons");
+        navigate("/recruiter-home");
       }, 2000);
     } catch (error) {
       setError(error.response?.data?.error || "Error creating hackathon");
@@ -61,9 +61,9 @@ const CreateHackathon = () => {
           Create a New Hackathon
         </h2>
 
-        {/* Back Button */}
+       
         <button
-          onClick={() => navigate("/recruiter-home")}
+          onClick={() => navigate(-1)}
           className="mb-6 flex items-center justify-center gap-3 px-6 py-3 text-lg font-medium text-white bg-gray-600 rounded-lg hover:bg-gray-700 transition transform hover:scale-105 shadow-md"
         >
           Back
